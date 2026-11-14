@@ -1,0 +1,1628 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b3dff">
+<title>PSP PlayStation</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;800&display=swap">
+<style>
+:root{
+  --bg1:#0a3df0;--bg2:#0626a8;--bg3:#031450;
+  --btn1:#0a1f6e;--btn2:#06134a;
+  --line:rgba(255,255,255,.22);--glass:rgba(255,255,255,.09);
+  --ice:#8fd3ff;--txt:#fff;--muted:#cfe0ff;
+  box-sizing:border-box;
+}
+*{box-sizing:border-box;margin:0}
+html,body{min-height:100%;color:var(--txt);font:15px/1.45 "Exo 2",system-ui,-apple-system,Segoe UI,Arial,sans-serif}
+body{background:radial-gradient(ellipse at 80% -10%,#2f7bff 0,transparent 45%),linear-gradient(180deg,var(--bg1),var(--bg2) 55%,var(--bg3));background-attachment:fixed}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:34px 34px;-webkit-mask-image:linear-gradient(180deg,#000,transparent 70%);mask-image:linear-gradient(180deg,#000,transparent 70%)}
+button,input,select{font:inherit;color:#fff}
+button{cursor:pointer;border:0}
+.app{position:relative;max-width:480px;margin:0 auto;min-height:100vh;padding:0 16px calc(96px + env(safe-area-inset-bottom,0px));padding-top:env(safe-area-inset-top,0px)}
+.hidden{display:none!important}
+
+/* boutons : bleu foncé, texte blanc */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 18px;border-radius:14px;font-weight:800;letter-spacing:.3px;background:linear-gradient(160deg,var(--btn1),var(--btn2));border:1px solid #4f86ff;box-shadow:0 0 0 1px #0a2a8f,0 8px 22px rgba(2,12,60,.55),inset 0 1px rgba(255,255,255,.18);transition:transform .15s,box-shadow .15s}
+.btn:active{transform:scale(.97)}
+.btn:focus-visible,.tab:focus-visible,.nav button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--ice);outline-offset:2px}
+.btn.wide{width:100%}
+.glass{background:var(--glass);border:1px solid var(--line);border-radius:20px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:16px}
+.muted{color:var(--muted);font-size:13px}
+h1,h2,h3{font-weight:800;letter-spacing:.2px}
+h2{font-size:22px;margin-bottom:4px}
+
+/* barre haute */
+.top{display:flex;align-items:center;justify-content:space-between;padding:16px 0 10px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px}
+.logo{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(160deg,var(--btn1),var(--btn2));border:1px solid #4f86ff;box-shadow:0 0 18px #3a7bff}
+.logo svg{width:24px;height:24px}
+.iconbtn{width:40px;height:40px;border-radius:12px;background:linear-gradient(160deg,var(--btn1),var(--btn2));border:1px solid #4f86ff;font-size:18px}
+
+/* hero */
+.hero{position:relative;overflow:hidden;border-radius:26px;padding:22px 18px 18px;margin:6px 0 16px;border:1px solid rgba(160,210,255,.5);background:radial-gradient(ellipse at 70% 40%,rgba(120,200,255,.5),transparent 55%),linear-gradient(140deg,#0a2fc4,#041a73);box-shadow:0 0 40px rgba(60,130,255,.45),inset 0 0 0 1px rgba(255,255,255,.08)}
+.hero h1{font-size:34px;line-height:1;max-width:60%;margin:8px 0 10px}
+.hero p{max-width:55%;margin-bottom:16px;color:var(--muted);font-size:13px}
+.hero .pad{position:absolute;right:-34px;bottom:10px;width:62%;transform:rotate(-12deg);filter:drop-shadow(0 18px 22px rgba(0,8,50,.7))}
+.hero .ring{position:absolute;right:-60px;top:-70px;width:230px;height:230px;border-radius:50%;border:1px solid rgba(180,225,255,.4);box-shadow:0 0 0 22px rgba(255,255,255,.04),0 0 0 48px rgba(255,255,255,.03)}
+@media(prefers-reduced-motion:no-preference){.hero .pad{animation:float 5s ease-in-out infinite}}
+@keyframes float{50%{transform:translateY(-8px) rotate(-9deg)}}
+
+/* solde + actions */
+.balance{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.balance strong{display:block;font-size:30px;line-height:1.1}
+.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px}
+.action{display:flex;flex-direction:column;align-items:center;gap:7px;padding:13px 4px;border-radius:16px;font-size:12px;font-weight:600;background:linear-gradient(160deg,var(--btn1),var(--btn2));border:1px solid #4f86ff;box-shadow:0 6px 16px rgba(2,12,60,.5)}
+.action i{font-style:normal;font-size:21px}
+
+/* plans */
+.sec{display:flex;justify-content:space-between;align-items:baseline;margin:6px 2px 12px}
+.sec h3{font-size:18px}
+.plan{display:grid;grid-template-columns:116px 1fr;gap:14px;align-items:center;margin-bottom:14px}
+.plan .art{aspect-ratio:1;border-radius:18px;display:grid;place-items:center;background:radial-gradient(circle at 50% 55%,color-mix(in srgb,var(--glow) 45%,transparent),transparent 70%),#041468;border:1px solid var(--glow);box-shadow:0 0 22px color-mix(in srgb,var(--glow) 50%,transparent)}
+.plan .art svg{width:104%}
+.plan h4{font-size:17px}
+.price{font-size:22px;font-weight:800;color:var(--ice)}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 12px}
+.stats div{padding:8px 10px;border-radius:12px;background:rgba(2,12,70,.55);border:1px solid var(--line)}
+.stats small{display:block;color:var(--muted);font-size:11px}
+.stats b{font-size:14px}
+.plan .btn{grid-column:1/-1}
+
+/* pages / formulaires */
+.page{display:none}.page.active{display:block}
+.title{display:flex;align-items:center;gap:12px;margin:8px 0 16px}
+.back{width:40px;height:40px;border-radius:12px;font-size:22px;background:linear-gradient(160deg,var(--btn1),var(--btn2));border:1px solid #4f86ff}
+.field{margin-bottom:12px}
+.field label{display:block;margin-bottom:6px;font-size:13px;color:var(--muted)}
+input,select{width:100%;padding:13px 14px;border-radius:12px;background:rgba(2,12,70,.7);border:1px solid #4f86ff}
+input::placeholder{color:#9db8f5}
+.row{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border:0}
+.pay{display:flex;align-items:center;gap:12px;width:100%;text-align:left;margin-bottom:10px}
+
+/* connexion */
+.auth{min-height:100vh;max-width:480px;margin:0 auto;padding:30px 20px;display:flex;flex-direction:column;justify-content:center;position:relative}
+.auth .pad{width:78%;margin:0 auto 4px;display:block;transform:rotate(-8deg);filter:drop-shadow(0 18px 20px rgba(0,8,50,.7))}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:5px;border-radius:16px;background:rgba(2,12,70,.6);margin-bottom:16px}
+.tab{padding:11px;border-radius:12px;background:transparent;font-weight:600}
+.tab.active{background:linear-gradient(160deg,var(--btn1),var(--btn2));border:1px solid #4f86ff}
+
+/* navigation basse */
+.nav{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom,0px));width:min(448px,calc(100% - 24px));display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:7px;border-radius:22px;background:rgba(3,16,84,.92);border:1px solid #4f86ff;box-shadow:0 0 28px rgba(40,110,255,.5),0 14px 30px rgba(0,5,40,.6);z-index:20}
+.nav button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 0;border-radius:15px;background:transparent;font-size:11px;font-weight:600}
+.nav button span{font-size:19px}
+.nav button.active{background:linear-gradient(160deg,#1a46d6,#0a2a9a);box-shadow:inset 0 1px rgba(255,255,255,.25)}
+.toast{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:200;width:calc(100% - 32px);max-width:420px;padding:14px 16px;border-radius:16px;font-size:14px;font-weight:600;line-height:1.35;text-align:left!important;background:var(--btn2);border:1px solid #4f86ff;box-shadow:0 10px 30px rgba(0,5,40,.6);}
+</style>
+<style>
+/* Base minimale pour l'espace administrateur (thème noir d'origine ci-dessous) */
+#admin .titlebar{display:flex;align-items:center;gap:12px}
+#admin .back{width:40px;height:40px;font-size:22px;border-radius:12px}
+#admin .panel{padding:14px;margin-bottom:12px}
+#admin .stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}@media(min-width:400px){#admin .stats{grid-template-columns:1fr 1fr 1fr 1fr}}
+#admin .stat{padding:12px}#admin .stat small{display:block}
+#admin .wide{display:block;width:100%;padding:12px;font-weight:800;cursor:pointer}
+#admin .smallbtn{padding:7px 10px;border-radius:8px;cursor:pointer;background:#171d28;color:#fff;border:1px solid #303949;font-size:11px;margin:2px}
+#admin .field{margin-bottom:12px}#admin table{width:100%;font-size:12px}#admin td,#admin th{padding:8px;border:1px solid}
+</style>
+<style id="psp-admin-black-theme">
+/* Thème noir réservé à l'espace administrateur : le site client reste bleu et blanc */
+body:has(#admin.active){background:#050608!important;color:#f5f7fb!important}
+body:has(#admin.active) #app,
+body:has(#admin.active) main,
+body:has(#admin.active) .app-shell{background:#050608!important;color:#f5f7fb!important}
+#admin.page.active{background:#050608!important;color:#f5f7fb!important;padding:14px 12px 28px!important;min-height:100vh}
+#admin .titlebar{background:#090b10!important;border:1px solid #20242d!important;border-radius:15px;padding:12px!important;margin-bottom:14px}
+#admin .titlebar h2,#admin h2,#admin h3,#admin h4,#admin strong,#admin b{color:#fff!important}
+#admin .subtext,#admin .muted,#admin p{color:#aeb8c8!important}
+#admin .panel,#admin #adminLoginBox,#admin #adminDashboard .panel{
+ background:linear-gradient(145deg,#11151d,#090b10)!important;
+ color:#f4f6fa!important;border:1px solid #2a303c!important;
+ border-radius:15px!important;box-shadow:0 8px 24px #0008!important;
+}
+#admin .stat,#admin .stats .stat{
+ background:linear-gradient(145deg,#171c26,#0b0e14)!important;
+ border:1px solid #303847!important;border-radius:13px!important;color:#fff!important;
+}
+#admin .stat small,#admin .stats small{color:#aab5c6!important}
+#admin .stat strong,#admin .stats strong{color:#fff!important}
+#admin .field label{color:#d9e0eb!important}
+#admin input,#admin select,#admin textarea{
+ background:#080b11!important;color:#fff!important;border:1px solid #343d4c!important;
+ border-radius:9px!important;caret-color:#42a5ff!important;
+}
+#admin input::placeholder,#admin textarea::placeholder{color:#778397!important}
+#admin input:focus,#admin select:focus,#admin textarea:focus{
+ outline:none!important;border-color:#1685ff!important;box-shadow:0 0 0 3px #1685ff26!important;
+}
+#admin button.wide,#admin .wide{
+ background:linear-gradient(100deg,#0869e8,#168cff)!important;color:#fff!important;
+ border:1px solid #329cff!important;border-radius:10px!important;
+}
+#admin button:not(.back){color:#fff}
+#admin .back{background:#171d28!important;color:#fff!important;border:1px solid #303949!important}
+#admin .tablewrap{background:#080b10!important;border:1px solid #272e3a!important;border-radius:11px!important;overflow-x:auto}
+#admin table{background:#080b10!important;color:#f4f6fa!important;border-collapse:collapse!important}
+#admin table thead,#admin table th{background:#171d28!important;color:#fff!important}
+#admin table td,#admin table th{border-color:#2b3340!important;color:#e9edf5!important}
+#admin table tr:nth-child(even){background:#10151d!important}
+#admin table tr:nth-child(odd){background:#090c12!important}
+#admin table tr:hover{background:#182234!important}
+#admin .badge,#admin .pill{background:#17263b!important;color:#b8dcff!important;border:1px solid #2c4e77!important}
+#admin a{color:#65b6ff!important}
+#admin hr,#admin .divider{border-color:#2a303c!important}
+#admin .hidden{display:none!important}
+/* Les fenêtres de confirmation ouvertes depuis l'administration suivent aussi le thème sombre */
+body:has(#admin.active) .modalback{background:#000c!important}
+body:has(#admin.active) .modal{
+ background:#0c1017!important;color:#f5f7fb!important;border:1px solid #303949!important;
+ box-shadow:0 20px 70px #000c!important;
+}
+body:has(#admin.active) .modal h2,body:has(#admin.active) .modal h3,
+body:has(#admin.active) .modal b,body:has(#admin.active) .modal strong{color:#fff!important}
+body:has(#admin.active) .modal p,body:has(#admin.active) .modal .muted{color:#b2bdcd!important}
+body:has(#admin.active) .modal input,body:has(#admin.active) .modal select,
+body:has(#admin.active) .modal textarea{background:#070a10!important;color:#fff!important;border-color:#364153!important}
+@media(max-width:420px){
+ #admin.page.active{padding:10px 9px 24px!important}
+ #admin .panel{padding:12px!important}
+ #admin table{min-width:560px}
+}
+</style>
+
+
+
+<style id="psp-motion-pack">
+/* Animations PSP : transitions douces, retour tactile et apparitions progressives */
+:root{scroll-behavior:smooth}
+@keyframes pspFadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pspFadeIn{from{opacity:0}to{opacity:1}}
+@keyframes pspGlow{0%,100%{box-shadow:0 0 0 rgba(75,160,255,0)}50%{box-shadow:0 0 22px rgba(75,160,255,.24)}}
+@keyframes pspShimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+@keyframes pspPop{0%{transform:scale(.96);opacity:.65}70%{transform:scale(1.015)}100%{transform:scale(1);opacity:1}}
+@keyframes pspFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.page.active{animation:pspFadeIn .28s ease both}
+.page.active .title,.page.active>.glass,.page.active>.plans,.page.active>.sec{animation:pspFadeUp .42s cubic-bezier(.2,.75,.25,1) both}
+.page.active .title{animation-delay:.03s}
+.page.active>.glass{animation-delay:.07s}
+.page.active>.plans{animation-delay:.11s}
+.glass{transition:transform .24s ease,border-color .24s ease,box-shadow .24s ease}
+.glass:focus-within{border-color:rgba(143,211,255,.7);box-shadow:0 0 0 3px rgba(80,160,255,.12)}
+.btn,.action,.tab,.nav button,.iconbtn,.back{transition:transform .18s ease,filter .2s ease,box-shadow .22s ease,background-color .2s ease}
+.btn:hover,.action:hover,.iconbtn:hover{filter:brightness(1.14);box-shadow:0 0 20px rgba(85,160,255,.24),0 8px 22px rgba(2,12,60,.5)}
+.btn:active,.action:active,.tab:active,.nav button:active,.iconbtn:active,.back:active{transform:scale(.965)}
+.action:hover{transform:translateY(-3px)}
+.plan{transition:transform .22s ease,filter .22s ease}
+.plan:hover{transform:translateY(-3px);filter:brightness(1.08)}
+.plan .art{transition:transform .35s ease,box-shadow .35s ease}
+.plan:hover .art{transform:rotate(-3deg) scale(1.035);box-shadow:0 0 28px color-mix(in srgb,var(--glow) 65%,transparent)}
+.tab.active{animation:pspPop .24s ease both}
+.nav{animation:pspNavIn .45s ease both}@keyframes pspNavIn{from{opacity:0;transform:translateX(-50%) translateY(14px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+.nav button.active{animation:none}
+.toast:not(.hidden){animation:pspToastIn .3s ease both}@keyframes pspToastIn{from{opacity:0;transform:translateX(-50%) translateY(-16px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+input,select{transition:border-color .2s ease,box-shadow .2s ease,background .2s ease}
+input:focus,select:focus{box-shadow:0 0 0 3px rgba(100,175,255,.16);border-color:#9bd8ff}
+.hero{animation:pspFadeIn .6s ease both}
+.hero .ring{animation:pspGlow 4s ease-in-out infinite}
+.logo{animation:pspGlow 3.5s ease-in-out infinite}
+/* Laisse l'espace admin sobre, mais anime les changements de panneaux */
+#admin.page.active .panel,#admin.page.active .titlebar{animation:pspFadeUp .32s ease both}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+
+<style id="psp-mobile-layout-fix">
+html,body{overflow-x:hidden}
+.app{padding-bottom:calc(154px + env(safe-area-inset-bottom,0px))}
+.hero{isolation:isolate}
+.hero h1,.hero p,.hero>.btn{position:relative;z-index:2}
+.hero h1{max-width:68%;font-size:clamp(28px,8vw,34px)}
+.hero p{max-width:66%}
+.hero>.btn{max-width:72%;padding:12px 13px;font-size:14px;white-space:normal;text-align:center}
+.hero .pad{width:49%;right:-22px;bottom:5px;z-index:1;pointer-events:none}
+.nav{width:calc(100% - 32px);max-width:448px;bottom:calc(8px + env(safe-area-inset-bottom,0px));grid-template-columns:repeat(4,minmax(0,1fr));}
+.nav button{min-width:0;font-size:10px;padding:7px 1px}
+.nav button span{font-size:18px}
+.plan{grid-template-columns:minmax(88px,30%) minmax(0,1fr);gap:11px}
+.plan .art{min-width:0}
+.plan .stats{min-width:0}
+@media(max-width:390px){
+ .app{padding-left:12px;padding-right:12px}
+ .hero{padding:20px 15px 17px}
+ .hero h1{max-width:66%;font-size:29px}
+ .hero p{max-width:62%;font-size:12px}
+ .hero>.btn{max-width:68%;font-size:12px;padding:11px 9px}
+ .hero .pad{width:47%;right:-18px}
+ .nav{width:calc(100% - 24px)}
+ .nav button{font-size:9px}
+}
+</style>
+
+<style id="dep-wizard-css">
+.dep-wizard{position:fixed;inset:0;z-index:80;background:rgba(2,8,40,.72);display:flex;align-items:flex-end;justify-content:center;padding:12px;padding-bottom:calc(12px + env(safe-area-inset-bottom,0px))}
+.dep-wizard.hidden{display:none!important}
+.dep-sheet{width:min(480px,100%);max-height:min(92vh,720px);overflow:auto;background:linear-gradient(180deg,#0b2bb8,#061a6e 40%,#04124a);border:1px solid #4f86ff;border-radius:22px 22px 18px 18px;box-shadow:0 20px 50px rgba(0,0,0,.45);padding:16px 16px 20px}
+.dep-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.dep-head strong{font-size:17px}
+.dep-close{width:36px;height:36px;border-radius:10px;background:rgba(2,12,70,.7);border:1px solid #4f86ff;color:#fff;font-size:22px;line-height:1}
+.pay-icons{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.pay-icon{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 6px;border-radius:14px;background:linear-gradient(160deg,#0a1f6e,#06134a);border:1px solid #4f86ff;color:#fff}
+.pay-icon.selected{border-color:#8fd3ff;box-shadow:0 0 0 2px rgba(143,211,255,.35)}
+.pay-logo{display:grid;place-items:center;width:48px;height:48px;border-radius:14px;font-weight:800;font-size:13px}
+.pay-logo.mtn{background:#ffcc00;color:#1a1a1a}
+.pay-logo.wave{background:#1dc8ff;color:#003}
+.pay-logo.orange{background:#ff7900;color:#fff}
+.dep-step .btn{margin-top:4px}
+.dep-sheet{padding:18px 16px calc(20px + env(safe-area-inset-bottom,0px))}
+.dep-sheet .field label{font-size:13px;font-weight:600;color:#cfe0ff;margin-bottom:7px}
+.dep-sheet input[type=tel],.dep-sheet input[type=number]{height:54px;font-size:17px;font-weight:600;border-radius:14px;background:rgba(1,8,52,.75);border:1.5px solid #3f6fe0;padding:0 16px}
+.dep-sheet input:focus{border-color:#9bd8ff;box-shadow:0 0 0 4px rgba(120,190,255,.18)}
+.dep-sheet .btn{width:100%;height:54px;font-size:16px;border-radius:16px}
+.dep-prog{display:flex;gap:6px;margin:0 0 16px}
+.dep-prog i{flex:1;height:5px;border-radius:5px;background:rgba(255,255,255,.16);transition:background .25s}
+.dep-prog i.on{background:linear-gradient(90deg,#6fd0ff,#4f86ff)}
+.dep-head{gap:10px}
+.dep-head strong{flex:1}
+.dep-back{width:36px;height:36px;border-radius:10px;background:rgba(2,12,70,.7);border:1px solid #4f86ff;color:#fff;font-size:20px;line-height:1}
+.dep-back.hidden{display:none}
+.dep-country{display:flex;align-items:center;gap:8px;margin-top:10px;padding:10px 12px;border-radius:12px;background:rgba(111,208,255,.1);border:1px solid rgba(111,208,255,.3);font-size:13px;font-weight:600;min-height:20px}
+.dep-country:empty{display:none}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.chip{padding:9px 14px;border-radius:999px;background:rgba(2,12,70,.7);border:1px solid #4f86ff;font-size:13px;font-weight:700}
+.chip:active{transform:scale(.96)}
+.pay-icons{gap:10px}
+.pay-icon{padding:14px 6px 12px;border-radius:16px;font-weight:700;transition:transform .15s,border-color .15s,box-shadow .15s}
+.pay-icon small{font-size:12px;color:#dbe8ff}
+.pay-icon.selected{border-color:#8fd3ff;background:linear-gradient(160deg,#143aa8,#0a2373);box-shadow:0 0 0 2px rgba(143,211,255,.45),0 8px 18px rgba(0,10,60,.5);transform:translateY(-2px)}
+.pay-logo{width:58px;height:58px;border-radius:16px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.35)}
+.pay-logo svg{width:100%;height:100%;display:block}
+.recap{padding:12px 14px;border-radius:14px;background:rgba(1,8,52,.6);border:1px solid rgba(111,150,255,.35);margin-bottom:14px}
+.recap .row{padding:7px 0;font-size:14px}
+.recap .row:last-child{border-bottom:0}
+.upload{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:22px 12px;border:2px dashed #5a8cff;border-radius:16px;background:rgba(1,8,52,.5);text-align:center;cursor:pointer}
+.upload b{font-size:15px}
+.upload small{color:#b9cdfb}
+.upload input{display:none}
+.upload.has-file{border-style:solid;border-color:#8fd3ff}
+#depProofImg{max-height:200px;object-fit:contain}
+</style>
+<script>window.PSP_ADMIN_EMAILS=['msourabi610@gmail.com'];window.pspIsAdmin=(user,token)=>token?.claims?.admin===true||PSP_ADMIN_EMAILS.includes((user?.email||'').toLowerCase());
+</script>
+
+<style id="psp-admin-premium">
+body:has(#admin.active) #app.app{max-width:none;width:100%;margin:0;padding:0 26px 36px!important}
+body:has(#admin.active) .nav{display:none!important}
+#admin.page.active{width:min(1600px,100%);margin:0 auto;background:
+ radial-gradient(900px 420px at 100% -10%,rgba(31,116,255,.20),transparent 58%),
+ radial-gradient(700px 340px at -20% 20%,rgba(0,211,190,.08),transparent 58%),
+ #070b13!important;padding:18px 14px 36px!important}
+#admin .titlebar{position:relative;overflow:hidden;background:linear-gradient(115deg,#111c30,#0b111d 62%,#102544)!important;
+ border:1px solid #263c5c!important;border-radius:20px!important;padding:18px!important;box-shadow:0 18px 50px #0007!important}
+#admin .titlebar:after{content:"";position:absolute;width:180px;height:180px;right:-55px;top:-90px;border-radius:50%;border:1px solid #4b8dff55;box-shadow:0 0 0 22px #4b8dff0c,0 0 0 48px #4b8dff08;pointer-events:none}
+#admin .titlebar h2{font-size:25px;letter-spacing:-.5px}
+#admin .subtext{font-size:12px;letter-spacing:.5px;text-transform:uppercase}
+#admin .admin-livebar{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:10px 12px;margin:0 0 13px;border:1px solid #20354e;border-radius:13px;background:#0b1421;color:#b9c9dd;font-size:11px}
+#admin .live-dot{width:8px;height:8px;border-radius:50%;background:#24d69a;box-shadow:0 0 12px #24d69a;flex:none}
+#admin #adminLastSync{margin-left:auto;color:#8294ac}
+#admin .admin-error{padding:13px 14px;margin-bottom:13px;border:1px solid #a84d57;border-radius:12px;background:#35151b;color:#ffd7dc;font-size:13px}
+#admin .stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:0 0 14px}
+#admin .stat{position:relative;overflow:hidden;min-height:92px;padding:15px!important;border-radius:17px!important;
+ background:linear-gradient(145deg,#131e30,#0b111c)!important;border:1px solid #253b58!important;box-shadow:0 10px 25px #0004!important}
+#admin .stat:after{content:"";position:absolute;width:72px;height:72px;right:-24px;bottom:-35px;border-radius:50%;background:#2488ff18}
+#admin .stat small{font-size:11px;letter-spacing:.3px}
+#admin .stat strong{display:block;font-size:27px;line-height:1.25;margin-top:7px;color:#f5f9ff!important;font-variant-numeric:tabular-nums}
+#admin .panel{padding:17px!important;margin-bottom:13px!important;border-radius:18px!important;background:linear-gradient(145deg,#101a29,#0a101a)!important;border:1px solid #22354d!important;box-shadow:0 14px 35px #0005!important}
+#admin .panel h3{font-size:16px;margin:0 0 8px;letter-spacing:.1px}
+#admin .panel>p.muted{font-size:12px!important;line-height:1.5}
+#admin .tablewrap{border-radius:13px!important;border-color:#263951!important;scrollbar-width:thin;scrollbar-color:#385477 #0b111b}
+#admin table{min-width:720px;font-size:12px!important}
+#admin th{position:sticky;top:0;z-index:1;padding:12px 10px!important;text-align:left;white-space:nowrap;letter-spacing:.35px;text-transform:uppercase;font-size:10px!important;color:#9fc5f4!important;background:#142239!important}
+#admin td{padding:11px 10px!important;vertical-align:middle;white-space:nowrap}
+#admin .smallbtn{border-radius:9px!important;padding:8px 10px!important;background:#16283e!important;border:1px solid #345170!important;color:#e8f2ff!important;font-size:11px!important;font-weight:700;transition:.18s ease}
+#admin .smallbtn:hover{filter:brightness(1.25);transform:translateY(-1px)}
+#admin .smallbtn[data-admin-act="approve-dep"],#admin .smallbtn[data-admin-act="approve-wd"]{background:#0d493b!important;border-color:#167b60!important}
+#admin .smallbtn[data-admin-act="reject-dep"],#admin .smallbtn[data-admin-act="reject-wd"]{background:#4a2028!important;border-color:#8a3c4a!important}
+#admin .wide{border-radius:12px!important;padding:13px!important;box-shadow:0 8px 20px #075bd333}
+#admin #adminLoginBox{max-width:520px;margin:22px auto;padding:22px!important}
+#admin input,#admin select{min-height:45px}
+#admin .badge{display:inline-block;padding:4px 8px;border-radius:999px}
+@media(min-width:650px){#admin.page.active{padding:24px!important}#admin .stats{grid-template-columns:repeat(3,minmax(0,1fr))}#admin .panel{padding:20px!important}#admin .titlebar{padding:22px!important}}
+@media(min-width:1100px){#admin .stats{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(max-width:650px){body:has(#admin.active) #app.app{padding:0 10px 28px!important}}
+@media(max-width:390px){#admin #adminLastSync{width:100%;margin-left:17px}#admin .stat{min-height:84px;padding:12px!important}#admin .stat strong{font-size:23px}}
+</style>
+
+</head>
+<body>
+
+<!-- Manette redessinée : style DualSense futuriste, couleur de lueur via "color" -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<defs>
+  <linearGradient id="gBody" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b3fcf"/><stop offset=".55" stop-color="#0a1d78"/><stop offset="1" stop-color="#040d3d"/></linearGradient>
+  <linearGradient id="gGrip" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e8f3ff"/><stop offset="1" stop-color="#9cc2ff"/></linearGradient>
+  <symbol id="pad" viewBox="0 0 240 150">
+    <!-- ombre et corps -->
+    <path d="M62 26C82 16 158 16 178 26C206 28 227 62 233 102C237 130 226 144 207 141C189 138 180 121 166 109H74C60 121 51 138 33 141C14 144 3 130 7 102C13 62 34 28 62 26Z" fill="url(#gBody)" stroke="currentColor" stroke-width="2.4"/>
+    <!-- coque claire supérieure -->
+    <path d="M70 31C92 24 148 24 170 31C186 36 200 52 206 74C190 62 168 54 120 54C72 54 50 62 34 74C40 52 54 36 70 31Z" fill="url(#gGrip)" opacity=".92"/>
+    <!-- barre lumineuse -->
+    <path d="M86 34Q120 26 154 34" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+    <!-- pavé tactile -->
+    <rect x="92" y="38" width="56" height="22" rx="9" fill="#0a1d78" stroke="currentColor" stroke-width="1.6"/>
+    <!-- croix directionnelle -->
+    <g fill="#061058" stroke="currentColor" stroke-width="1.6"><rect x="55" y="64" width="12" height="28" rx="3.5"/><rect x="47" y="72" width="28" height="12" rx="3.5"/></g>
+    <!-- boutons d'action -->
+    <g fill="#061058" stroke="currentColor" stroke-width="1.8"><circle cx="177" cy="66" r="6.5"/><circle cx="190" cy="78" r="6.5"/><circle cx="177" cy="90" r="6.5"/><circle cx="164" cy="78" r="6.5"/></g>
+    <path d="M177 62.4l3.2 5.4h-6.4z" fill="currentColor"/>
+    <circle cx="190" cy="78" r="2.6" fill="none" stroke="currentColor" stroke-width="1.4"/>
+    <path d="M174.6 87.6l5 4.8m0-4.8l-5 4.8" stroke="currentColor" stroke-width="1.4"/>
+    <rect x="161.6" y="75.6" width="4.8" height="4.8" fill="none" stroke="currentColor" stroke-width="1.4"/>
+    <!-- joysticks -->
+    <g><circle cx="92" cy="106" r="15" fill="#030a35" stroke="currentColor" stroke-width="1.8"/><circle cx="92" cy="106" r="8.5" fill="#0f2aa5" stroke="#9cc2ff" stroke-width="1"/>
+    <circle cx="148" cy="106" r="15" fill="#030a35" stroke="currentColor" stroke-width="1.8"/><circle cx="148" cy="106" r="8.5" fill="#0f2aa5" stroke="#9cc2ff" stroke-width="1"/></g>
+    <!-- bouton central -->
+    <circle cx="120" cy="84" r="4.5" fill="currentColor"/>
+    <g stroke="#9cc2ff" stroke-width="1.6" stroke-linecap="round"><path d="M104 72h6"/><path d="M130 72h6"/></g>
+  </symbol>
+  <symbol id="mini" viewBox="0 0 24 24"><path d="M7 7c3-1.4 7-1.4 10 0 2.4 1 3.6 4 4 7 .3 2.6-.8 3.8-2.4 3.6-1.5-.2-2.3-1.6-3.4-2.6H9.2c-1.1 1-1.9 2.4-3.400 2.600C4.200 17.800 3.100 16.600 3.400 14 3.800 11 5 8 7 7Z" fill="#fff"/></symbol>
+</defs>
+</svg>
+
+<!-- Connexion -->
+<div id="auth" class="auth">
+  <svg class="pad" viewBox="0 0 240 150" style="color:#7fd0ff"><use href="#pad"/></svg>
+  <h1 style="text-align:center;font-size:30px;margin:6px 0 4px">PSP PlayStation</h1>
+  <p class="muted" style="text-align:center;margin-bottom:20px">Créez votre compte ou connectez-vous</p>
+  <div class="tabs" role="tablist">
+    <button class="tab active" data-t="login">Se connecter</button>
+    <button class="tab" data-t="register">Créer un compte</button>
+  </div>
+  <div id="f-login" class="glass">
+    <div class="field"><label for="le">Adresse e-mail</label><input id="le" type="email" placeholder="exemple@gmail.com" autocomplete="email"></div>
+    <div class="field"><label for="lp">Mot de passe</label><input id="lp" type="password" placeholder="Votre mot de passe" autocomplete="current-password"></div>
+    <button class="btn wide" id="loginBtn">Se connecter</button>
+  </div>
+  <div id="f-profile" class="glass hidden">
+    <h2 style="margin-bottom:6px">Terminer mon profil</h2>
+    <p class="muted" style="margin-bottom:14px">Votre compte existe déjà. Complétez ces informations pour accéder à PSP PlayStation.</p>
+    <div class="field"><label for="pn">Nom complet</label><input id="pn" autocomplete="name" placeholder="Votre nom complet"></div>
+    <div class="field"><label for="pp">Téléphone</label><input id="pp" type="tel" autocomplete="tel" placeholder="Ex. +225 07… ou 07…"></div>
+    <div class="field"><label for="pc">Pays détecté</label><select id="pc"><option value="CI">Côte d’Ivoire</option><option value="BF">Burkina Faso</option><option value="ML">Mali</option><option value="GH">Ghana</option><option value="GN">Guinée</option><option value="LR">Liberia</option><option value="TG">Togo</option><option value="BJ">Bénin</option><option value="SN">Sénégal</option><option value="NE">Niger</option><option value="OTHER">Autre</option></select>
+    <p class="muted" style="font-size:11px;margin-top:6px">Détecté automatiquement depuis le numéro.</p></div>
+    <button class="btn wide" id="profileSaveBtn">Enregistrer mon profil</button>
+    <button class="btn wide" id="profileCancelBtn" style="margin-top:9px">Retour à la connexion</button>
+  </div>
+  <div id="f-register" class="glass hidden">
+    <div class="field"><label for="rn">Nom complet</label><input id="rn" placeholder="Nom et prénom" autocomplete="name"></div>
+    <div class="field"><label for="rt">Téléphone</label><input id="rt" type="tel" placeholder="Ex. +225 07… ou 07…" autocomplete="tel"></div>
+    <div class="field"><label for="rcountry">Pays détecté</label><select id="rcountry"><option value="CI">Côte d’Ivoire</option><option value="BF">Burkina Faso</option><option value="ML">Mali</option><option value="GH">Ghana</option><option value="GN">Guinée</option><option value="LR">Liberia</option><option value="TG">Togo</option><option value="BJ">Bénin</option><option value="SN">Sénégal</option><option value="NE">Niger</option><option value="OTHER">Autre</option></select>
+    <p class="muted" id="regCountryHint" style="font-size:11px;margin-top:6px">Le pays est détecté automatiquement à partir du numéro.</p></div>
+    <div class="field"><label for="re">Adresse e-mail</label><input id="re" type="email" placeholder="exemple@gmail.com"></div>
+    <div class="field"><label for="rp">Mot de passe (6 caractères minimum)</label><input id="rp" type="password" autocomplete="new-password"></div>
+    <button class="btn wide" id="regBtn">Créer mon compte</button>
+  </div>
+</div>
+
+<!-- Application -->
+<div id="app" class="app hidden">
+  <header class="top">
+    <div class="brand"><span class="logo"><svg viewBox="0 0 24 24"><use href="#mini"/></svg></span>PSP PlayStation</div>
+    <button class="iconbtn" aria-label="Notifications" data-toast="Aucune nouvelle notification.">🔔</button>
+  </header>
+
+  <!-- Accueil -->
+  <section id="home" class="page active">
+    <div class="hero">
+      <div class="ring"></div>
+      <h1>Jouez. Gagnez. Évoluez.</h1>
+      <p>Plans PlayStation VIP de 150 jours, gains chaque jour.</p>
+      <button class="btn" data-go="products">Découvrir les plans</button>
+      <svg class="pad" viewBox="0 0 240 150" style="color:#7fd0ff"><use href="#pad"/></svg>
+    </div>
+    <div class="glass balance">
+      <div><span class="muted">Solde dépôt</span><strong id="bal">0 FCFA</strong></div>
+      <button class="btn" data-go="recharge">Recharger</button>
+    </div>
+    <div class="actions">
+      <button class="action" data-go="recharge"><i>⤓</i>Recharger</button>
+      <button class="action" data-go="withdraw"><i>⤒</i>Retirer</button>
+      <button class="action" data-go="referral"><i>⬡</i>Équipe</button>
+      <button class="action" data-go="blog"><i>✦</i>Blog</button>
+      <button class="action" data-hist="inv"><i>◈</i>Historique investissements</button>
+      <button class="action" data-hist="tx"><i>⇄</i>Historique transactions</button>
+    </div>
+    <div class="sec"><h3>Plans VIP</h3><span class="muted">150 jours</span></div>
+    <div class="plans"></div>
+  </section>
+
+  <!-- Produits -->
+  <section id="products" class="page">
+    <div class="title"><button class="back" data-go="home" aria-label="Retour">‹</button><div><h2>Produits PlayStation VIP</h2><p class="muted">Choisissez votre plan de 150 jours.</p></div></div>
+    <div class="plans"></div>
+  </section>
+
+  <!-- Recharge -->
+  <section id="recharge" class="page">
+    <div class="title"><button class="back" data-go="home" aria-label="Retour">‹</button><div><h2>Recharger le compte</h2><p class="muted">Dépôt minimum 3 000 FCFA. Suivez les étapes.</p></div></div>
+    <div class="glass" style="text-align:center;padding:28px 18px">
+      <div style="font-size:42px;margin-bottom:10px">⤓</div>
+      <h3 style="margin-bottom:8px">Recharger mon solde</h3>
+      <p class="muted" style="margin-bottom:18px">Le parcours s’adapte automatiquement à votre pays (détecté via votre numéro).</p>
+      <button class="btn wide" id="startDepositBtn">Commencer le dépôt</button>
+      <p class="muted" style="margin-top:14px;font-size:12px">Le solde n’est crédité qu’après validation par l’administrateur.</p>
+    </div>
+  </section>
+
+<!-- Retrait -->
+  <section id="withdraw" class="page">
+    <div class="title"><button class="back" data-go="home" aria-label="Retour">‹</button><div><h2>Retirer mes fonds</h2><p class="muted">Demande soumise à validation. Aucun paiement automatique.</p></div></div>
+    <div class="glass">
+      <div class="field"><label for="wa">Montant (minimum 1 000 FCFA)</label><input id="wa" type="number" min="1000" inputmode="numeric" placeholder="Ex. 5 000"></div>
+      <div class="row"><span class="muted">Frais estimés (18 %)</span><b id="wf">0 FCFA</b></div>
+      <div class="row"><span class="muted">Montant à recevoir</span><b id="wn">0 FCFA</b></div>
+      <div class="field" style="margin-top:12px"><label for="wm">Portefeuille</label><select id="wm"><option>Wave</option><option>MTN Mobile Money</option><option>Orange Money</option></select></div>
+      <div class="field"><label for="wp">Numéro du bénéficiaire</label><input id="wp" type="tel" placeholder="Ex. 07 00 00 00 00"></div>
+      <button class="btn wide" id="wBtn">Vérifier ma demande</button>
+    </div>
+  </section>
+
+  <!-- Équipe -->
+  <section id="referral" class="page">
+    <div class="title"><button class="back" data-go="home" aria-label="Retour">‹</button><div><h2>Parrainage</h2><p class="muted">Commissions par niveau.</p></div></div>
+    <div class="glass">
+      <div class="row"><span>Niveau 1</span><b>37 %</b></div><div class="row"><span>Niveau 2</span><b>5 %</b></div>
+      <div class="row"><span>Niveau 3</span><b>2 %</b></div>
+      <button class="btn wide" style="margin-top:12px" data-copyref>Copier mon lien</button>
+    </div>
+  </section>
+
+  <!-- Aide -->
+  <section id="blog" class="page">
+    <div class="title"><button class="back" data-go="home" aria-label="Retour">‹</button><div><h2>Blog</h2><p class="muted">Partagez votre lien de parrainage.</p></div></div>
+    <div class="glass">
+      <div class="field"><label for="refLink">Votre lien de parrainage</label><input id="refLink" readonly value="Connectez-vous pour générer votre lien"></div>
+      <button class="btn wide" data-copyref>Copier mon lien</button>
+    </div>
+  </section>
+
+  <!-- Historique -->
+  <section id="history" class="page">
+    <div class="title"><button class="back" data-go="home" aria-label="Retour">‹</button><div><h2 id="histTitle">Historique</h2><p class="muted" id="histSub">Dépôts, retraits et plans.</p></div></div>
+    <div class="glass" id="histBox"><p class="muted">Aucune opération pour le moment.</p></div>
+  </section>
+
+  <!-- Compte -->
+  <section id="account" class="page">
+    <div class="title"><button class="back" data-go="home" aria-label="Retour">‹</button><div><h2>Mon compte</h2><p class="muted">Informations de votre profil.</p></div></div>
+    <div class="glass">
+      <h3 id="uname" style="margin-bottom:10px">Mon compte</h3>
+      <div class="row"><span class="muted">Solde dépôt</span><b id="bd">0 FCFA</b></div>
+      <div class="row"><span class="muted">Solde retrait</span><b id="bw">0 FCFA</b></div>
+      <button class="btn wide" style="margin-top:12px" data-go="products">Voir les plans VIP</button>
+      <button class="btn wide" style="margin-top:10px" id="logout">Déconnexion</button>
+    </div>
+  </section>
+
+<section id="admin" class="page">
+  <div class="titlebar">
+    <button class="back" onclick="go('home')">‹</button>
+    <div><h2>Administration</h2><p class="subtext">Espace administrateur PSP</p></div>
+  </div>
+
+  <div id="adminLoginBox" class="panel">
+    <p class="muted" style="font-size:11px">Connectez-vous avec le compte administrateur (claim admin Firebase requis).</p>
+    <div class="field"><label>Adresse e-mail administrateur</label>
+      <input id="adminUser" type="email" autocomplete="username" placeholder="email@gmail.com" value="msourabi610@gmail.com"></div>
+    <div class="field"><label>Mot de passe administrateur</label>
+      <input id="adminPass" type="password" autocomplete="current-password" placeholder="Mot de passe administrateur"></div>
+    <button class="wide" onclick="adminLogin()">Connexion administrateur</button>
+  </div>
+
+  <div id="adminDashboard" class="hidden">
+    <div class="admin-livebar"><span class="live-dot"></span><span>Synchronisation en direct</span><span id="adminLastSync">En attente des données…</span><button class="smallbtn" type="button" onclick="loadAdminData()">Actualiser</button></div>
+    <div id="adminDataError" class="admin-error hidden" role="alert"></div>
+    <div class="stats">
+      <div class="stat"><small>Membres</small><strong id="adminMembersCount">0</strong></div>
+      <div class="stat"><small>Actifs</small><strong id="adminActiveCount">0</strong></div>
+      <div class="stat"><small>Investis</small><strong id="adminInvestedCount">0</strong></div>
+      <div class="stat"><small>Dépôts en attente</small><strong id="adminDepositsCount">0</strong></div>
+      <div class="stat"><small>Retraits en attente</small><strong id="adminWithdrawals">0</strong></div>
+    </div>
+
+    <div class="panel">
+      <h3>Demandes de dépôt (avec preuve)</h3>
+      <p class="muted" style="font-size:11px;margin:0 0 10px">Valider crédite le solde dépôt. Rejeter refuse sans crédit. Cliquez sur « Voir preuve » pour la capture.</p>
+      <div id="adminDepositsBox" class="tablewrap"></div>
+    </div>
+
+    <div class="panel">
+      <h3>Demandes de retrait</h3>
+      <div id="adminWithdrawalsBox" class="tablewrap"></div>
+    </div>
+
+    <div class="panel">
+      <h3>Tous les investissements</h3>
+      <div id="adminInvestedTable" class="tablewrap"></div>
+    </div>
+
+    <div class="panel">
+      <h3>Offrir un plan VIP (sans débit)</h3>
+      <div class="field"><label>UID ou e-mail du client</label><input id="giftUser" placeholder="UID Firebase ou email"></div>
+      <div class="field"><label>Plan VIP</label>
+        <select id="giftPlan">
+          <option value="0">VIP 1 — 3 000</option>
+          <option value="1">VIP 2 — 6 000</option>
+          <option value="2">VIP 3 — 12 000</option>
+          <option value="3">VIP 4 — 20 000</option>
+          <option value="4">VIP 5 — 30 000</option>
+          <option value="5">VIP 6 — 40 000</option>
+          <option value="6">VIP 7 — 80 000</option>
+        </select>
+      </div>
+      <button class="wide" onclick="adminGiftPlan()">Offrir le plan VIP</button>
+    </div>
+
+    <div class="panel">
+      <h3>Plans VIP — verrouillage</h3>
+      <div id="adminPlansLock" class="tablewrap"></div>
+    </div>
+
+    <div class="panel">
+      <h3>Parrains & équipes</h3>
+      <div id="adminSponsorsTable" class="tablewrap"></div>
+    </div>
+
+    <div class="panel">
+      <h3>Tous les clients</h3>
+      <p class="muted" style="font-size:11px;margin:0 0 10px">Désactiver = blocage temporaire · Bannir = interdit · Réactiver = rétablir · Retrait ON/OFF = autoriser ou non les retraits · Effacer inv. = remboursement du prix sur le solde dépôt.</p>
+      <div id="adminUsersTable" class="tablewrap"></div>
+    </div>
+
+    <div class="panel">
+      <h3>Configuration Wave</h3>
+      <div class="field"><label>Lien Wave Business</label><input id="waveLink" value="https://pay.wave.com/m/M_ci_M32Pfr2sR-WA/c/ci/"></div>
+      <button class="wide" onclick="saveWave()">Enregistrer le lien</button>
+    </div>
+
+    <button class="wide" onclick="adminLogout()" style="margin-top:12px">Fermer la session admin</button>
+  </div>
+</section>
+
+<!-- Modal preuve de paiement -->
+<div id="proofModal" class="hidden" style="position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;padding:16px" onclick="if(event.target===this)closeProof()">
+  <div style="background:#0c1017;border:1px solid #303949;border-radius:16px;max-width:520px;width:100%;padding:16px;max-height:90vh;overflow:auto">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <h3 style="margin:0;color:#fff">Preuve de paiement</h3>
+      <button class="smallbtn" onclick="closeProof()">Fermer</button>
+    </div>
+    <img id="proofImg" alt="Preuve" style="width:100%;border-radius:10px;background:#111"/>
+    <p id="proofMeta" class="muted" style="margin-top:10px;font-size:12px"></p>
+  </div>
+</div>
+
+
+  <nav class="nav" aria-label="Navigation">
+    <button class="active" data-go="home"><span>⌂</span>Accueil</button>
+    <button data-go="products"><span>⬡</span>Mes produits</button>
+    <button data-go="history" data-hist="all"><span>◷</span>Historique</button>
+    <button data-go="account"><span>♟</span>Compte</button>
+  </nav>
+</div>
+
+<!-- Assistant de dépôt multi-étapes -->
+<div id="depWizard" class="dep-wizard hidden" aria-hidden="true">
+  <div class="dep-sheet">
+    <div class="dep-head">
+      <button type="button" class="dep-back hidden" id="depBack" aria-label="Retour">‹</button>
+      <strong id="depTitle">Dépôt</strong>
+      <button type="button" class="dep-close" id="depClose" aria-label="Fermer">×</button>
+    </div>
+    <div class="dep-prog" id="depProg"><i></i><i></i><i></i><i></i></div>
+    <div class="dep-body">
+      <div class="dep-step" data-step="1">
+        <p class="muted" style="margin-bottom:14px">Entrez le numéro avec lequel vous allez payer. Votre pays est reconnu automatiquement.</p>
+        <div class="field"><label for="depPhone">Numéro de téléphone</label>
+          <input id="depPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="Ex. 07 00 00 00 00 ou +225…">
+        </div>
+        <div id="depCountryHint" class="dep-country"></div>
+        <button class="btn wide" id="depNext1" style="margin-top:16px">Continuer</button>
+      </div>
+      <div class="dep-step hidden" data-step="2">
+        <div class="field"><label for="depAmount">Montant du dépôt (FCFA) — minimum 3 000</label>
+          <input id="depAmount" type="number" min="3000" step="500" inputmode="numeric" placeholder="Ex. 3000">
+        </div>
+        <div class="chips">
+          <button type="button" class="chip" data-amt="3000">3 000</button>
+          <button type="button" class="chip" data-amt="6000">6 000</button>
+          <button type="button" class="chip" data-amt="10000">10 000</button>
+          <button type="button" class="chip" data-amt="20000">20 000</button>
+        </div>
+        <div id="depMethodsBlock" class="hidden">
+          <p style="margin:18px 0 10px;font-weight:700">Choisissez votre moyen de paiement</p>
+          <div class="pay-icons">
+            <button type="button" class="pay-icon" data-method="MTN Mobile Money" data-num="0566219780"><span class="pay-logo mtn"><svg viewBox="0 0 64 64"><rect width="64" height="64" fill="#ffcb05"/><ellipse cx="32" cy="32" rx="26" ry="16" fill="none" stroke="#111" stroke-width="3"/><text x="32" y="38" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-weight="900" font-size="17" fill="#111">MTN</text></svg></span><small>MTN MoMo</small></button>
+            <button type="button" class="pay-icon" data-method="Wave" data-num="0596180495"><span class="pay-logo wave"><svg viewBox="0 0 64 64"><defs><linearGradient id="wg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5fe0ff"/><stop offset="1" stop-color="#12a5ee"/></linearGradient></defs><rect width="64" height="64" fill="url(#wg)"/><path d="M10 28c5-8 10-8 15 0s10 8 15 0 10-8 14 0M10 42c5-8 10-8 15 0s10 8 15 0 10-8 14 0" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/></svg></span><small>Wave</small></button>
+            <button type="button" class="pay-icon" data-method="Orange Money" data-num="0749045488"><span class="pay-logo orange"><svg viewBox="0 0 64 64"><rect width="64" height="64" fill="#ff7900"/><rect x="8" y="8" width="14" height="14" fill="#fff"/><text x="9" y="52" font-family="Arial,sans-serif" font-weight="700" font-size="15" fill="#fff">orange</text></svg></span><small>Orange Money</small></button>
+          </div>
+        </div>
+        <button class="btn wide" id="depNext2" style="margin-top:18px">Continuer</button>
+      </div>
+      <div class="dep-step hidden" data-step="3ci">
+        <p class="muted" style="margin-bottom:14px">Payez <b id="depCiAmount">—</b> via Jeko (Orange, MTN, Moov, Wave…), puis revenez ici envoyer votre capture d’écran.</p>
+        <a class="btn wide" id="depJekoLink" href="https://pay.jeko.africa/pl/4c3cbecb-54d4-473f-a0eb-d19692de03dc" target="_blank" rel="noopener">Payer avec Jeko</a>
+        <button class="btn wide" id="depNext3ci" style="margin-top:12px">J’ai payé — envoyer la preuve</button>
+      </div>
+      <div class="dep-step hidden" data-step="3out">
+        <div class="recap">
+          <div class="row"><span class="muted">Bénéficiaire</span><b>PSP Investi</b></div>
+          <div class="row"><span class="muted">Moyen</span><b id="depMethodLabel">—</b></div>
+          <div class="row"><span class="muted">Numéro</span><b id="depPayNumber">—</b></div>
+          <div class="row"><span class="muted">Montant</span><b id="depPayAmount">—</b></div>
+        </div>
+        <button type="button" class="btn wide" id="depCopyNum">Copier le numéro</button>
+        <button type="button" class="btn wide" id="depCopyName" style="margin-top:8px">Copier le nom (PSP Investi)</button>
+        <p class="muted" style="margin:12px 0;font-size:12px">Vérifiez que le nom affiché est bien <b>PSP Investi</b> avant de confirmer le transfert.</p>
+        <button class="btn wide" id="depNext3out">J’ai payé — envoyer la preuve</button>
+      </div>
+      <div class="dep-step hidden" data-step="4">
+        <div class="recap" id="depRecap"></div>
+        <label class="upload" id="depUpload" for="depProof">
+          <b id="depUploadTitle">Ajouter la capture d’écran</b>
+          <small>Touchez pour choisir une image (JPG, PNG, WEBP)</small>
+          <input id="depProof" type="file" accept="image/*">
+        </label>
+        <div id="depProofPreview" class="hidden" style="margin:12px 0;text-align:center">
+          <img id="depProofImg" alt="Aperçu" style="max-width:100%;border-radius:12px;border:1px solid var(--line)">
+        </div>
+        <button class="btn wide" id="depSubmit" style="margin-top:14px">Valider et envoyer</button>
+      </div>
+      <div class="dep-step hidden" data-step="5">
+        <div style="text-align:center;padding:18px 8px">
+          <div style="font-size:48px;margin-bottom:8px">🎉</div>
+          <h3 style="margin-bottom:8px">Demande envoyée</h3>
+          <p class="muted" style="margin-bottom:18px">Votre dépôt est en attente de validation par l’administrateur. Le solde sera crédité après vérification.</p>
+          <button class="btn wide" id="depDone">Retour à l’accueil</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toastRoot"></div>
+
+<script>
+const DAYS=150; // même durée pour tous les plans
+const PLANS=[ // VIP 1 : gains à renseigner (daily et total)
+  {n:1,price:3000,daily:850,total:127500,glow:'#7dd3fc'},
+  {n:2,price:6000,daily:1700,total:255000,glow:'#4fd1ff'},
+  {n:3,price:12000,daily:3500,total:525000,glow:'#8fa8ff'},
+  {n:4,price:20000,daily:5500,total:825000,glow:'#5eead4'},
+  {n:5,price:30000,daily:8300,total:1245000,glow:'#67e8f9'},
+  {n:6,price:40000,daily:11100,total:1665000,glow:'#a5b4fc'},
+  {n:7,price:80000,daily:23000,total:3450000,glow:'#c4b5fd'}
+];
+const F=n=>{const v=Number(n);return (Number.isFinite(v)?v:0).toLocaleString('fr-FR')+' FCFA';};
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+function toast(t){const r=$('#toastRoot');const el=document.createElement('div');el.className='toast';el.setAttribute('role','status');el.textContent=String(t);r.replaceChildren(el);setTimeout(()=>r.replaceChildren(),3000)}
+function go(id){
+  $$('.page').forEach(p=>p.classList.toggle('active',p.id===id));
+  $$('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.go===id));
+  window.scrollTo(0,0);
+}
+window.go = go;
+function renderPlans(){
+  const html=PLANS.map((p,i)=>{const full=!!p.daily,name=p.n?'PlayStation VIP '+p.n:'Plan PlayStation';
+  return `<article class="glass plan" style="--glow:${p.glow}">
+    <div class="art"><svg viewBox="0 0 240 150" style="color:${p.glow}"><use href="#pad"/></svg></div>
+    <div><h4>${name}</h4><div class="price">${F(p.price)}</div></div>
+    <div class="stats" style="grid-column:1/-1">
+      <div><small>Durée</small><b>150 jours</b></div><div><small>Mise</small><b>${F(p.price)}</b></div>
+      ${full?`<div><small>Gain par jour</small><b>${F(p.daily)}</b></div><div><small>Gain total</small><b>${F(p.total)}</b></div>`:''}
+    </div>
+    <button class="btn" data-buy="${i}">Acheter ${p.n?'le plan VIP '+p.n:'ce plan'}</button></article>`}).join('');
+  $$('.plans').forEach(e=>e.innerHTML=html);
+}
+renderPlans();
+
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(g){go(g.dataset.go);if(g.dataset.go==='recharge'){setTimeout(openDepositWizard,180);return}}
+  const t=e.target.closest('[data-toast]');if(t){toast(t.dataset.toast);return}
+  const b=e.target.closest('[data-buy]');
+  if(b)buy(+b.dataset.buy);
+});
+$$('.tab').forEach(t=>t.onclick=()=>{
+  $$('.tab').forEach(x=>x.classList.toggle('active',x===t));
+  $('#f-login').classList.toggle('hidden',t.dataset.t!=='login');
+  $('#f-register').classList.toggle('hidden',t.dataset.t!=='register');
+});
+function enter(name){refresh();$('#auth').classList.add('hidden');$('#app').classList.remove('hidden');$('#uname').textContent=name||'Mon compte';go('home')}
+/* logout handler set later */
+/* wa oninput handled later with CONFIG */
+
+/* ===== Configuration (à confirmer) ===== */
+
+const CONFIG={minDeposit:3000,minWithdraw:1000,feeRate:.18};
+
+/* ===== Détection pays depuis le numéro ===== */
+const COUNTRY_NAMES={CI:'Côte d’Ivoire',BF:'Burkina Faso',ML:'Mali',GH:'Ghana',GN:'Guinée',LR:'Liberia',TG:'Togo',BJ:'Bénin',SN:'Sénégal',NE:'Niger',OTHER:'Autre pays'};
+function normalizePhone(raw){
+  let s=String(raw||'').replace(/[^\d+]/g,'');
+  if(s.startsWith('00')) s='+'+s.slice(2);
+  return s;
+}
+function detectCountryFromPhone(raw){
+  const s=normalizePhone(raw);
+  const digits=s.replace(/\D/g,'');
+  // Indicatifs internationaux
+  if(s.startsWith('+225')||digits.startsWith('225')) return 'CI';
+  if(s.startsWith('+226')||digits.startsWith('226')) return 'BF';
+  if(s.startsWith('+223')||digits.startsWith('223')) return 'ML';
+  if(s.startsWith('+233')||digits.startsWith('233')) return 'GH';
+  if(s.startsWith('+224')||digits.startsWith('224')) return 'GN';
+  if(s.startsWith('+231')||digits.startsWith('231')) return 'LR';
+  if(s.startsWith('+228')||digits.startsWith('228')) return 'TG';
+  if(s.startsWith('+229')||digits.startsWith('229')) return 'BJ';
+  if(s.startsWith('+221')||digits.startsWith('221')) return 'SN';
+  if(s.startsWith('+227')||digits.startsWith('227')) return 'NE';
+  // Locaux Côte d’Ivoire : 10 chiffres commençant par 01,05,07 (opérateur mobile)
+  if(/^(01|05|07)\d{8}$/.test(digits)) return 'CI';
+  if(/^0\d{9}$/.test(digits) && digits.length===10) return 'CI'; // défaut local 10 chiffres → CI
+  return 'OTHER';
+}
+function bindCountryDetection(phoneSel, countrySel, hintSel){
+  const phone=$(phoneSel), country=$(countrySel), hint=hintSel?$(hintSel):null;
+  if(!phone||!country) return;
+  const apply=()=>{
+    const code=detectCountryFromPhone(phone.value);
+    if([...country.options].some(o=>o.value===code)) country.value=code;
+    else country.value='OTHER';
+    if(hint) hint.textContent=depCountryText(code);
+  };
+  phone.addEventListener('input', apply);
+  phone.addEventListener('change', apply);
+}
+
+/* ===== Assistant de dépôt ===== */
+const DEP_FLAGS={CI:'🇨🇮',BF:'🇧🇫',ML:'🇲🇱',GH:'🇬🇭',GN:'🇬🇳',LR:'🇱🇷',TG:'🇹🇬',BJ:'🇧🇯',SN:'🇸🇳',NE:'🇳🇪'};const depCountryText=c=>'Pays détecté : '+(DEP_FLAGS[c]||'🌍')+' '+(COUNTRY_NAMES[c]||c);
+const PAY_NUMBERS={'MTN Mobile Money':'0566219780','Wave':'0596180495','Orange Money':'0749045488'};
+const JEKO_URL='https://pay.jeko.africa/pl/4c3cbecb-54d4-473f-a0eb-d19692de03dc';
+const depState={step:'1',phone:'',country:'CI',amount:0,method:'Jeko',payNumber:''};
+
+function depShow(step){
+  depState.step=step;
+  $$('#depWizard .dep-step').forEach(el=>el.classList.toggle('hidden', el.dataset.step!==step));
+  const titles={'1':'Votre numéro','2':'Montant du dépôt','3ci':'Paiement Jeko','3out':'Paiement Mobile Money','4':'Preuve de paiement','5':'Terminé'};
+  const t=$('#depTitle'); if(t) t.textContent=titles[step]||'Dépôt';
+  const idx={'1':1,'2':2,'3ci':3,'3out':3,'4':4,'5':4}[step]||1;
+  $$('#depProg i').forEach((el,i)=>el.classList.toggle('on',i<idx));
+  $('#depProg')?.classList.toggle('hidden',step==='5');
+  $('#depBack')?.classList.toggle('hidden',step==='1'||step==='5');
+  if(step==='4'){const m=depState.method==='Jeko'?'Jeko':depState.method;
+    $('#depRecap').innerHTML='<div class="row"><span class="muted">Montant</span><b>'+F(depState.amount)+'</b></div><div class="row"><span class="muted">Moyen</span><b>'+m+'</b></div><div class="row"><span class="muted">Numéro</span><b>'+depState.phone+'</b></div>';}
+}
+function openDepositWizard(){
+  depState.step='1'; depState.phone=''; depState.amount=0; depState.method='Jeko'; depState.payNumber='';
+  const ph=$('#depPhone'), am=$('#depAmount'), pf=$('#depProof');
+  if(ph) ph.value=''; if(am) am.value=''; if(pf) pf.value=''; $('#depUpload')?.classList.remove('has-file'); const ut=$('#depUploadTitle'); if(ut) ut.textContent='Ajouter la capture d’écran'; const hint0=$('#depCountryHint'); if(hint0) hint0.textContent='';
+  $('#depProofPreview')?.classList.add('hidden');
+  $$('.pay-icon').forEach(b=>b.classList.remove('selected'));
+  $('#depMethodsBlock')?.classList.add('hidden');
+  // Prefill phone from profile if available
+  API.current().then(u=>{
+    if(u?.phone && ph){ ph.value=u.phone; const code=detectCountryFromPhone(u.phone); depState.country=code;
+      const hint=$('#depCountryHint'); if(hint) hint.textContent=depCountryText(code);
+    }
+  }).catch(()=>{});
+  const w=$('#depWizard');
+  if(w){ w.classList.remove('hidden'); w.setAttribute('aria-hidden','false'); }
+  depShow('1');
+}
+function closeDepositWizard(){
+  const w=$('#depWizard');
+  if(w){ w.classList.add('hidden'); w.setAttribute('aria-hidden','true'); }
+}
+
+let HF='all'; // filtre de l'historique : all | inv | tx
+const HT={all:['Historique','Dépôts, retraits et plans.'],inv:['Historique des investissements','Vos plans VIP achetés.'],tx:['Historique des transactions','Vos dépôts et retraits.']};
+const refLink=u=>location.href.split('#')[0].split('?')[0]+'?ref='+encodeURIComponent(u.id);
+
+/* ===== Couche données : REMPLACEZ le contenu de chaque méthode par vos appels à la base de données =====
+   Contrat : chaque méthode est async, renvoie les données ou lance une Error avec un message lisible. */
+const API=(()=>{
+  const fb=async()=>{if(!window.pspFirebaseReady)throw Error("Firebase n'est pas initialisé.");return await window.pspFirebaseReady};
+  const readProfile=async(uid)=>{const {db,ref,get}=await fb();const snap=await get(ref(db,'users/'+uid));return snap.exists()?{id:uid,...snap.val()}:null};
+  return {
+    async register({name,phone,email,country}) {
+      const {auth,db,ref,set,createUserWithEmailAndPassword}=await fb();
+      const cred=await createUserWithEmailAndPassword(auth,email,document.querySelector('#rp').value);
+      const profile={name,phone,email,country,depositBalance:0,withdrawBalance:0,status:'active',createdAt:Date.now(),referrer:new URLSearchParams(location.search).get('ref')||null};
+      localStorage.setItem('psp_profile_name',name);localStorage.setItem('psp_profile_phone',phone);localStorage.setItem('psp_profile_country',country);
+      try {
+        await set(ref(db,'users/'+cred.user.uid),profile);
+      } catch (error) {
+        // Auth account exists even if the profile write was denied; next login repairs it.
+        error.message = 'Compte Auth créé, mais profil non enregistré dans Realtime Database. Publiez les règles PSP compatibles, puis utilisez Se connecter pour terminer le profil. Détail : ' + (error.message || error.code || 'permission refusée');
+        throw error;
+      }
+      return {id:cred.user.uid,...profile};
+    },
+    async login({email,password}) {
+      const {auth,db,ref,set,signInWithEmailAndPassword}=await fb();const cred=await signInWithEmailAndPassword(auth,email,password);
+      const token=await cred.user.getIdTokenResult(true);
+      if(pspIsAdmin(cred.user,token)){const profile=await readProfile(cred.user.uid);return {...(profile||{}),id:cred.user.uid,email:cred.user.email,isAdmin:true};}
+      let profile=await readProfile(cred.user.uid);
+      if(!profile){
+        return {needsProfile:true,email:cred.user.email,id:cred.user.uid};
+      }
+      return {...profile,id:cred.user.uid};
+    },
+    async completeProfile({name,phone,country}) {
+      const {auth,db,ref,set}=await fb();const user=auth.currentUser;
+      if(!user)throw Error("Votre session a expiré. Reconnectez-vous.");
+      const profile={name:name.trim(),phone:phone.trim(),email:user.email,country:country.toUpperCase(),depositBalance:0,withdrawBalance:0,status:'active',createdAt:Date.now(),referrer:new URLSearchParams(location.search).get('ref')||null};
+      await set(ref(db,'users/'+user.uid),profile);
+      localStorage.setItem('psp_profile_name',profile.name);
+      localStorage.setItem('psp_profile_phone',profile.phone);
+      localStorage.setItem('psp_profile_country',profile.country);
+      return {...profile,id:user.uid};
+    },
+    async logout(){const {auth,signOut}=await fb();await signOut(auth);},
+    async current(){const {auth}=await fb();return auth.currentUser?await readProfile(auth.currentUser.uid):null;},
+    async createDeposit({amount,method,phone,proof}) {
+      const {auth,db,ref,push,update,storage,storageRef,uploadBytes}=await fb();const user=auth.currentUser;if(!user)throw Error("Reconnectez-vous.");
+      const id=push(ref(db,'deposits')).key;const blob=await (await fetch(proof)).blob();
+      let path='deposit-proofs/'+user.uid+'/'+id,inline=null;
+      try{
+        await Promise.race([uploadBytes(storageRef(storage,path),blob,{contentType:'image/jpeg'}),new Promise((_,rej)=>setTimeout(()=>rej(Error('timeout')),20000))]);
+      }catch(e){ console.warn('Storage indisponible, repli sur la base de données :',e); path='inline:'+id; inline=proof; }
+      const record={userId:user.uid,amount,method,phone,receiptRef:'',proofPath:path,status:'pending',createdAt:Date.now()};
+      await update(ref(db),{
+        ['deposits/'+id]:inline?{...record,proofData:inline}:record,
+        ['userRecords/'+user.uid+'/deposits/'+id]:record
+      });
+    },
+    async createWithdrawal({amount,method,phone}) {
+      const {auth,db,ref,get,push,update}=await fb();const user=auth.currentUser;if(!user)throw Error("Reconnectez-vous.");
+      const profile=await readProfile(user.uid);
+      if(!profile) throw Error('Profil introuvable.');
+      if(profile.status==='banned'||profile.status==='disabled') throw Error('Compte non autorisé à retirer.');
+      if(profile.canWithdraw===false) throw Error('Les retraits sont désactivés pour votre compte. Contactez le support.');
+      const bal=Number(profile.withdrawBalance)||0;
+      const pendingSnap=await get(ref(db,'userRecords/'+user.uid+'/withdrawals'));
+      const allWithdrawals=pendingSnap.exists()?pendingSnap.val():{};
+      const alreadyReserved=Object.values(allWithdrawals||{}).reduce((sum,w)=>sum+(w&&w.status==='pending'?(Number(w.amount)||0):0),0);
+      if(bal-alreadyReserved < amount) throw Error('Solde disponible après demandes en attente insuffisant ('+F(Math.max(0,bal-alreadyReserved))+').');
+      const id=push(ref(db,'withdrawals')).key;
+      const record={userId:user.uid,amount,method,phone,status:'pending',createdAt:Date.now()};
+      await update(ref(db),{
+        ['withdrawals/'+id]:record,
+        ['userRecords/'+user.uid+'/withdrawals/'+id]:record
+      });
+    },
+    async buyPlan(planIndex){
+      const plan = PLANS[planIndex];
+      if(!plan || plan.daily == null) throw Error('Plan indisponible.');
+      const {auth,db,ref,get,update,push}=await fb();
+      const user=auth.currentUser; if(!user) throw Error('Reconnectez-vous.');
+      // Plan lock check
+      const lockSnap=await get(ref(db,'config/planLocks/'+planIndex));
+      if(lockSnap.exists() && lockSnap.val()===true) throw Error('Ce plan VIP est temporairement verrouillé.');
+      const profile=await readProfile(user.uid);
+      if(!profile) throw Error('Profil introuvable.');
+      if(profile.status==='banned') throw Error('Compte banni.');
+      if(profile.status==='disabled') throw Error('Compte désactivé. Contactez le support.');
+      const price=plan.price;
+      const bal=Number(profile.depositBalance)||0;
+      if(bal < price) throw Error('Solde dépôt insuffisant ('+F(bal)+'). Rechargez votre compte.');
+      const invId=push(ref(db,'investments')).key;
+      const now=Date.now();
+      const record={
+        userId:user.uid,
+        planIndex,
+        planName:'PlayStation VIP '+plan.n,
+        price,
+        daily:plan.daily,
+        total:plan.total,
+        days:DAYS,
+        status:'active',
+        createdAt:now,
+        startAt:now,
+        endAt:now + DAYS*86400000,
+        claimedDays:0,
+        earned:0
+      };
+      const updates={};
+      updates['users/'+user.uid+'/depositBalance']=bal - price;
+      updates['investments/'+invId]=record;
+      updates['userRecords/'+user.uid+'/investments/'+invId]=record;
+      await update(ref(db), updates);
+      return record;
+    },
+    async processEarnings(){
+      // Credit daily gains for active plans based on elapsed calendar days (client-side accrual).
+      const {auth,db,ref,get,update}=await fb();
+      const user=auth.currentUser; if(!user) return 0;
+      const snap=await get(ref(db,'userRecords/'+user.uid+'/investments'));
+      if(!snap.exists()) return 0;
+      const invs=snap.val()||{};
+      const profile=await readProfile(user.uid);
+      if(!profile) return 0;
+      let totalCredit=0;
+      const updates={};
+      const dayMs=86400000;
+      const now=Date.now();
+      for(const [id,inv] of Object.entries(invs)){
+        if(!inv || inv.status!=='active' || !inv.daily) continue;
+        const start=inv.startAt||inv.createdAt||now;
+        const elapsed=Math.floor((now - start)/dayMs);
+        const maxDays=inv.days||DAYS;
+        const claimable=Math.min(maxDays, Math.max(0, elapsed)) - (inv.claimedDays||0);
+        if(claimable <= 0){
+          if(elapsed >= maxDays && inv.status==='active'){
+            updates['userRecords/'+user.uid+'/investments/'+id+'/status']='completed';
+            updates['investments/'+id+'/status']='completed';
+          }
+          continue;
+        }
+        const credit=claimable * inv.daily;
+        totalCredit += credit;
+        const newClaimed=(inv.claimedDays||0)+claimable;
+        const newEarned=(inv.earned||0)+credit;
+        updates['userRecords/'+user.uid+'/investments/'+id+'/claimedDays']=newClaimed;
+        updates['userRecords/'+user.uid+'/investments/'+id+'/earned']=newEarned;
+        updates['investments/'+id+'/claimedDays']=newClaimed;
+        updates['investments/'+id+'/earned']=newEarned;
+        if(newClaimed >= maxDays){
+          updates['userRecords/'+user.uid+'/investments/'+id+'/status']='completed';
+          updates['investments/'+id+'/status']='completed';
+        }
+      }
+      if(totalCredit > 0){
+        updates['users/'+user.uid+'/withdrawBalance']=(Number(profile.withdrawBalance)||0)+totalCredit;
+        await update(ref(db), updates);
+      } else if(Object.keys(updates).length){
+        await update(ref(db), updates);
+      }
+      return totalCredit;
+    },
+    async adminApproveDeposit(id){
+      const {db,ref,get,update}=await fb();
+      const snap=await get(ref(db,'deposits/'+id));
+      if(!snap.exists()) throw Error('Dépôt introuvable.');
+      const d=snap.val();
+      if(d.status!=='pending') throw Error('Dépôt déjà traité.');
+      const profile=await readProfile(d.userId);
+      if(!profile) throw Error('Utilisateur introuvable.');
+      const amount=Number(d.amount)||0;
+      await update(ref(db),{
+        ['deposits/'+id+'/status']:'approved',
+        ['deposits/'+id+'/processedAt']:Date.now(),
+        ['userRecords/'+d.userId+'/deposits/'+id+'/status']:'approved',
+        ['users/'+d.userId+'/depositBalance']:(Number(profile.depositBalance)||0)+amount
+      });
+    },
+    async adminRejectDeposit(id){
+      const {db,ref,get,update}=await fb();
+      const snap=await get(ref(db,'deposits/'+id));
+      if(!snap.exists()) throw Error('Dépôt introuvable.');
+      const d=snap.val();
+      if(d.status!=='pending') throw Error('Dépôt déjà traité.');
+      await update(ref(db),{
+        ['deposits/'+id+'/status']:'rejected',
+        ['deposits/'+id+'/processedAt']:Date.now(),
+        ['userRecords/'+d.userId+'/deposits/'+id+'/status']:'rejected'
+      });
+    },
+    async adminApproveWithdrawal(id){
+      const {db,ref,get,update}=await fb();
+      const snap=await get(ref(db,'withdrawals/'+id));
+      if(!snap.exists()) throw Error('Retrait introuvable.');
+      const w=snap.val();
+      if(w.status!=='pending') throw Error('Retrait déjà traité.');
+      const profile=await readProfile(w.userId);
+      if(!profile) throw Error('Utilisateur introuvable.');
+      const amount=Number(w.amount)||0;
+      const bal=Number(profile.withdrawBalance)||0;
+      if(bal < amount) throw Error('Solde retrait utilisateur insuffisant.');
+      await update(ref(db),{
+        ['withdrawals/'+id+'/status']:'paid',
+        ['withdrawals/'+id+'/processedAt']:Date.now(),
+        ['userRecords/'+w.userId+'/withdrawals/'+id+'/status']:'paid',
+        ['users/'+w.userId+'/withdrawBalance']:bal - amount
+      });
+    },
+    async adminRejectWithdrawal(id){
+      const {db,ref,get,update}=await fb();
+      const snap=await get(ref(db,'withdrawals/'+id));
+      if(!snap.exists()) throw Error('Retrait introuvable.');
+      const w=snap.val();
+      if(w.status!=='pending') throw Error('Retrait déjà traité.');
+      await update(ref(db),{
+        ['withdrawals/'+id+'/status']:'rejected',
+        ['withdrawals/'+id+'/processedAt']:Date.now(),
+        ['userRecords/'+w.userId+'/withdrawals/'+id+'/status']:'rejected'
+      });
+    },
+    async adminSetUserStatus(uid, status){
+      const {db,ref,update}=await fb();
+      if(!['active','disabled','banned'].includes(status)) throw Error('Statut invalide.');
+      await update(ref(db),{['users/'+uid+'/status']:status});
+    },
+    async adminTogglePlanLock(planIndex, locked){
+      const {db,ref,set}=await fb();
+      await set(ref(db,'config/planLocks/'+planIndex), !!locked);
+    },
+
+    async adminGiftPlan({userKey, planIndex}){
+      const {db,ref,get,update,push}=await fb();
+      const plan=PLANS[planIndex];
+      if(!plan) throw Error('Plan invalide.');
+      let uid=userKey.trim();
+      // Resolve email to uid if needed
+      if(uid.includes('@')){
+        const usersSnap=await get(ref(db,'users'));
+        if(!usersSnap.exists()) throw Error('Aucun utilisateur.');
+        const found=Object.entries(usersSnap.val()).find(([,u])=>(u.email||'').toLowerCase()===uid.toLowerCase());
+        if(!found) throw Error('Aucun compte avec cet e-mail.');
+        uid=found[0];
+      }
+      const profile=await readProfile(uid);
+      if(!profile) throw Error('Utilisateur introuvable.');
+      const invId=push(ref(db,'investments')).key;
+      const now=Date.now();
+      const record={
+        userId:uid,
+        planIndex,
+        planName:'PlayStation VIP '+plan.n,
+        price:plan.price,
+        daily:plan.daily,
+        total:plan.total,
+        days:DAYS,
+        status:'active',
+        createdAt:now,
+        startAt:now,
+        endAt:now+DAYS*86400000,
+        claimedDays:0,
+        earned:0,
+        gifted:true
+      };
+      await update(ref(db),{
+        ['investments/'+invId]:record,
+        ['userRecords/'+uid+'/investments/'+invId]:record
+      });
+      return record;
+    },
+    async adminCancelInvestment(invId, refund){
+      const {db,ref,get,update}=await fb();
+      const snap=await get(ref(db,'investments/'+invId));
+      if(!snap.exists()) throw Error('Investissement introuvable.');
+      const inv=snap.val();
+      if(inv.status==='cancelled') throw Error('Déjà annulé.');
+      const updates={};
+      updates['investments/'+invId+'/status']='cancelled';
+      updates['investments/'+invId+'/cancelledAt']=Date.now();
+      updates['userRecords/'+inv.userId+'/investments/'+invId+'/status']='cancelled';
+      if(refund){
+        const profile=await readProfile(inv.userId);
+        if(profile){
+          const price=Number(inv.price)||0;
+          updates['users/'+inv.userId+'/depositBalance']=(Number(profile.depositBalance)||0)+price;
+        }
+      }
+      await update(ref(db), updates);
+    },
+    async adminDeleteUser(uid, wipeBalances){
+      const {db,ref,update}=await fb();
+      // Soft approach: mark deleted + zero balances, keep auth account (Auth delete needs Admin SDK)
+      const updates={};
+      updates['users/'+uid+'/status']='banned';
+      updates['users/'+uid+'/deletedAt']=Date.now();
+      if(wipeBalances){
+        updates['users/'+uid+'/depositBalance']=0;
+        updates['users/'+uid+'/withdrawBalance']=0;
+      }
+      await update(ref(db), updates);
+    },
+    async adminSetCanWithdraw(uid, allowed){
+      const {db,ref,update}=await fb();
+      await update(ref(db),{['users/'+uid+'/canWithdraw']:!!allowed});
+    },
+    async getProofUrl(path){
+      if(!path) return null;
+      if(path.startsWith('inline:')){const {db,ref,get}=await fb();const sn=await get(ref(db,'deposits/'+path.slice(7)+'/proofData'));return sn.exists()?sn.val():null;}
+      const {storage,storageRef,getDownloadURL}=await fb();
+      try{ return await getDownloadURL(storageRef(storage, path)); }
+      catch(e){ console.warn('proof url', e); return null; }
+    },
+    async history(){
+      const {auth,db,ref,get}=await fb();
+      const user=auth.currentUser;if(!user)return[];const out=[];
+      // Read only the signed-in user's private index. RTDB rules are not query filters.
+      const snap=await get(ref(db,'userRecords/'+user.uid));
+      if(snap.exists()){
+        const groups=snap.val()||{};
+        for(const [key,label] of [['deposits','Dépôt'],['withdrawals','Retrait'],['investments','Investissement']]){
+          Object.entries(groups[key]||{}).forEach(([id,x])=>out.push({...x,id,type:label,at:x.createdAt||x.at,amount:x.amount||x.price}));
+        }
+      }
+      return out.sort((a,b)=>(b.at||0)-(a.at||0));
+    }
+  };
+})();
+
+const run=async(fn,ok)=>{try{await fn();if(ok)toast(ok);await refresh();return true}catch(e){toast(e.message||'Une erreur est survenue.');return false}};
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+async function refresh(){
+  try{
+    const earned=await API.processEarnings();
+    if(earned>0) toast('Gains journaliers crédités : '+F(earned));
+  }catch(e){ console.warn('processEarnings', e); }
+  const u=await API.current();if(!u)return;
+  if(u.status==='banned'){ toast('Compte banni.'); await API.logout(); $('#app').classList.add('hidden'); $('#auth').classList.remove('hidden'); return; }
+  if(u.status==='disabled'){ toast('Compte désactivé.'); }
+  $('#bal').textContent=$('#bd').textContent=F(u.depositBalance||0);$('#bw').textContent=F(u.withdrawBalance||0);$('#uname').textContent=u.name||u.email||'Mon compte';
+  const hs=(await API.history()).filter(x=>HF==='inv'?x.type==='Investissement':HF==='tx'?x.type!=='Investissement':true);
+  $('#histTitle').textContent=HT[HF][0];$('#histSub').textContent=HT[HF][1];$('#refLink').value=refLink(u);
+  $('#histBox').innerHTML=hs.length?hs.map(x=>{
+    const extra=x.type==='Investissement'&&x.daily?` · ${F(x.daily)}/j · ${esc(x.status||'')}`:` · ${esc(x.status||'')}`;
+    return `<div class="row"><span>${esc(x.type)}${x.planName?' — '+esc(x.planName):''}<br><small class="muted">${new Date(x.at||x.createdAt||0).toLocaleDateString('fr-FR')}${extra}</small></span><b>${F(x.amount||x.price||0)}</b></div>`;
+  }).join(''):'<p class="muted">Aucune opération pour le moment.</p>';
+}
+const buy=i=>run(()=>API.buyPlan(i),'Plan VIP activé. Les gains journaliers seront crédités automatiquement.');
+function firebaseMessage(e){const c=e?.code||'';if(c==='auth/user-not-found'||c==='auth/invalid-credential')return 'Compte introuvable ou mot de passe incorrect. Essayez Se connecter avec le compte déjà créé.';if(c==='auth/email-already-in-use')return 'Cette adresse possède déjà un compte. Utilisez Se connecter au lieu de créer un compte.';if(c==='PERMISSION_DENIED'||c==='database/permission-denied')return 'Accès Firebase refusé : publiez les règles compatibles fournies avec cette version, notamment la création de /users/{UID} par son propriétaire.';return e?.message||'Erreur Firebase.';}
+const okMail=m=>/\S+@\S+\.\S+/.test(m);
+$('#loginBtn').onclick=()=>{const email=$('#le').value.trim();if(!okMail(email)||!$('#lp').value)return toast('Saisissez une adresse e-mail et un mot de passe valides.');API.login({email,password:$('#lp').value}).then(u=>{if(u.isAdmin)return openAdmin();if(u.needsProfile){$('#f-login').classList.add('hidden');$('#f-register').classList.add('hidden');$('.tabs').classList.add('hidden');$('#f-profile').classList.remove('hidden');$('#pn').value=localStorage.getItem('psp_profile_name')||'';$('#pp').value=localStorage.getItem('psp_profile_phone')||'';$('#pc').value=localStorage.getItem('psp_profile_country')||'CI';return;}enter(u.name||u.email)}).catch(e=>toast(firebaseMessage(e)))};
+$('#regBtn').onclick=()=>{const name=$('#rn').value.trim(),phone=$('#rt').value.trim(),email=$('#re').value.trim(),country=$('#rcountry').value;if(!name||!phone||!okMail(email)||$('#rp').value.length<6)return toast('Renseignez nom, téléphone, e-mail valide et un mot de passe de 6 caractères minimum.');API.register({name,phone,email,country}).then(u=>enter(u.name)).catch(e=>toast(e.message))};
+$('#profileSaveBtn').onclick=async()=>{const name=$('#pn').value.trim(),phone=$('#pp').value.trim(),country=$('#pc').value;if(name.length<2||phone.length<6)return toast('Saisissez votre nom complet et un numéro de téléphone valide.');const ok=await run(()=>API.completeProfile({name,phone,country}),'Profil enregistré.');if(ok){$('.tabs').classList.remove('hidden');$('#f-profile').classList.add('hidden');enter(name)}};
+$('#profileCancelBtn').onclick=()=>API.logout().then(()=>{$('#f-profile').classList.add('hidden');$('.tabs').classList.remove('hidden');$('#f-login').classList.remove('hidden');$('#lp').value=''}).catch(e=>toast(firebaseMessage(e)));
+$('#logout').onclick=()=>API.logout().then(()=>{$('#app').classList.add('hidden');$('#auth').classList.remove('hidden')}).catch(e=>toast(firebaseMessage(e)));
+const paymentNumbers={'MTN Mobile Money':'0566219780','Wave':'0596180495','Orange Money':'0749045488'};
+$('#wBtn').onclick=async()=>{const amount=+$('#wa').value,phone=$('#wp').value.trim();
+  if(!Number.isInteger(amount)||amount<CONFIG.minWithdraw)return toast('Le montant minimum de retrait est de '+F(CONFIG.minWithdraw)+'.');
+  if(!phone)return toast('Saisissez le numéro du bénéficiaire.');
+  const u=await API.current();
+  if(!u)return toast('Reconnectez-vous.');
+  if((u.withdrawBalance||0)<amount)return toast('Solde de retrait insuffisant ('+F(u.withdrawBalance||0)+').');
+  if(await run(()=>API.createWithdrawal({amount,method:$('#wm').value,phone}),'Demande de retrait envoyée. En attente de validation.')){$('#wa').value=$('#wp').value='';$('#wf').textContent=$('#wn').textContent=F(0);go('history')}};
+
+$('#wa').oninput=e=>{const v=+e.target.value||0,f=Math.round(v*CONFIG.feeRate);$('#wf').textContent=F(f);$('#wn').textContent=F(Math.max(0,v-f))};
+
+/* ===== Bind inscription : détection pays ===== */
+bindCountryDetection('#rt','#rcountry','#regCountryHint');
+bindCountryDetection('#pp','#pc',null);
+
+/* ===== Assistant dépôt — événements ===== */
+$('#startDepositBtn')?.addEventListener('click', openDepositWizard);
+$('#depClose')?.addEventListener('click', closeDepositWizard);
+$('#depPhone')?.addEventListener('input', ()=>{
+  const code=detectCountryFromPhone($('#depPhone').value);
+  depState.country=code;
+  const hint=$('#depCountryHint');
+  if(hint) hint.textContent=depCountryText(code);
+});
+$('#depNext1')?.addEventListener('click', ()=>{
+  const phone=($('#depPhone').value||'').trim();
+  if(phone.replace(/\D/g,'').length<8) return toast('Saisissez un numéro de téléphone valide.');
+  depState.phone=phone;
+  depState.country=detectCountryFromPhone(phone);
+  const isCI=depState.country==='CI';
+  const block=$('#depMethodsBlock');
+  if(block) block.classList.toggle('hidden', isCI);
+  if(isCI){ depState.method='Jeko'; depState.payNumber=''; }
+  depShow('2');
+});
+$$('.pay-icon').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    $$('.pay-icon').forEach(b=>b.classList.remove('selected'));
+    btn.classList.add('selected');
+    depState.method=btn.dataset.method;
+    depState.payNumber=btn.dataset.num;
+  });
+});
+$('#depNext2')?.addEventListener('click', ()=>{
+  const amount=+$('#depAmount').value;
+  if(!Number.isInteger(amount)||amount<CONFIG.minDeposit) return toast('Le dépôt minimum est de '+F(CONFIG.minDeposit)+'.');
+  depState.amount=amount;
+  const isCI=depState.country==='CI';
+  if(isCI){
+    depState.method='Jeko';
+    const a=$('#depJekoLink'); if(a) a.href=JEKO_URL; const ca=$('#depCiAmount'); if(ca) ca.textContent=F(depState.amount);
+    depShow('3ci');
+  } else {
+    if(!depState.method || depState.method==='Jeko' || !depState.payNumber) return toast('Choisissez MTN, Wave ou Orange Money.');
+    const ml=$('#depMethodLabel'), pn=$('#depPayNumber'), pa=$('#depPayAmount');
+    if(ml) ml.textContent=depState.method;
+    if(pn) pn.textContent=depState.payNumber;
+    if(pa) pa.textContent=F(depState.amount);
+    depShow('3out');
+  }
+});
+$('#depNext3ci')?.addEventListener('click', ()=>depShow('4'));
+$('#depNext3out')?.addEventListener('click', ()=>depShow('4'));
+$('#depCopyName')?.addEventListener('click', ()=>{
+  (navigator.clipboard?.writeText('PSP Investi')||Promise.reject()).then(()=>toast('Nom copié : PSP Investi'),()=>toast('Copiez : PSP Investi'));
+});
+$('#depCopyNum')?.addEventListener('click', ()=>{
+  const n=depState.payNumber||'';
+  (navigator.clipboard?.writeText(n)||Promise.reject()).then(()=>toast('Numéro copié.'),()=>toast('Copiez le numéro : '+n));
+});
+$('#depProof')?.addEventListener('change', ()=>{
+  const file=$('#depProof').files?.[0];
+  const box=$('#depProofPreview'), img=$('#depProofImg'), up=$('#depUpload'), ut=$('#depUploadTitle');
+  if(!file||!box||!img){ box?.classList.add('hidden'); up?.classList.remove('has-file'); if(ut) ut.textContent='Ajouter la capture d’écran'; return; }
+  img.src=URL.createObjectURL(file); box.classList.remove('hidden'); up?.classList.add('has-file'); if(ut) ut.textContent='Changer la capture';
+});
+$$('.chip').forEach(c=>c.addEventListener('click',()=>{$('#depAmount').value=c.dataset.amt}));
+$('#depBack')?.addEventListener('click',()=>{
+  const st=depState.step;
+  if(st==='2')depShow('1');
+  else if(st==='3ci'||st==='3out')depShow('2');
+  else if(st==='4')depShow(depState.country==='CI'?'3ci':'3out');
+});
+const compressImage=file=>new Promise((res,rej)=>{
+  const url=URL.createObjectURL(file), im=new Image();
+  im.onload=()=>{
+    const k=Math.min(1,1280/Math.max(im.naturalWidth,im.naturalHeight)), w=Math.round(im.naturalWidth*k), h=Math.round(im.naturalHeight*k);
+    const c=document.createElement('canvas'); c.width=w; c.height=h;
+    const x=c.getContext('2d'); x.fillStyle='#fff'; x.fillRect(0,0,w,h); x.drawImage(im,0,0,w,h); URL.revokeObjectURL(url);
+    let q=.78, d=c.toDataURL('image/jpeg',q);
+    while(d.length>600000&&q>.35){ q-=.1; d=c.toDataURL('image/jpeg',q); }
+    res(d);
+  };
+  im.onerror=()=>{ URL.revokeObjectURL(url); rej(Error('Image illisible. Choisissez une capture JPG, PNG ou WEBP.')); };
+  im.src=url;
+});
+let depBusy=false;
+$('#depSubmit')?.addEventListener('click', async ()=>{
+  if(depBusy) return;
+  const file=$('#depProof').files?.[0];
+  if(!depState.phone) return toast('Numéro manquant.');
+  if(!depState.amount||depState.amount<CONFIG.minDeposit) return toast('Montant invalide.');
+  if(!file) return toast('Ajoutez la capture d’écran de votre paiement.');
+  if(file.type && !file.type.startsWith('image/')) return toast('Format refusé. Utilisez une image.');
+  const btn=$('#depSubmit'), old=btn.textContent;
+  depBusy=true; btn.disabled=true; btn.textContent='Envoi en cours…';
+  try{
+    const proof=await compressImage(file);
+    await API.createDeposit({amount:depState.amount,method:depState.method,phone:depState.phone,proof});
+    depShow('5');
+    refresh().catch(()=>{});
+  }catch(e){ console.error(e); toast(firebaseMessage(e)); }
+  finally{ depBusy=false; btn.disabled=false; btn.textContent=old; }
+});
+$('#depDone')?.addEventListener('click', ()=>{ closeDepositWizard(); go('home'); refresh(); });
+
+
+let adminUnsubs=[];
+let adminRefreshTimer=null;
+function stopAdminLive(){
+  adminUnsubs.forEach(unsub=>{try{unsub()}catch(e){}});
+  adminUnsubs=[];
+  if(adminRefreshTimer) clearTimeout(adminRefreshTimer);
+  adminRefreshTimer=null;
+}
+function showAdminError(message){
+  const box=$('#adminDataError');
+  if(box){box.textContent=message;box.classList.remove('hidden');}
+}
+function clearAdminError(){
+  const box=$('#adminDataError');
+  if(box){box.textContent='';box.classList.add('hidden');}
+}
+function startAdminLive(){
+  stopAdminLive();
+  (async()=>{
+    try{
+      const {auth,db,ref,onValue}=await (await window.pspFirebaseReady);
+      const user=auth.currentUser;
+      const token=user?await user.getIdTokenResult(true):null;
+      if(!user||!pspIsAdmin(user,token)) throw Error('Session administrateur non autorisée. Reconnectez-vous.');
+      const paths=['users','deposits','withdrawals','config/planLocks','investments'];
+      paths.forEach(path=>{
+        const unsub=onValue(ref(db,path),()=>{
+          clearAdminError();
+          if(adminRefreshTimer) clearTimeout(adminRefreshTimer);
+          adminRefreshTimer=setTimeout(()=>loadAdminData(),180);
+        },error=>{
+          showAdminError('Firebase bloque la lecture de /'+path+' : '+(error?.message||'permission refusée')+'. Vérifiez les règles Realtime Database : l’administrateur doit avoir un droit de lecture sur ce chemin.');
+        });
+        adminUnsubs.push(unsub);
+      });
+      await loadAdminData();
+    }catch(error){showAdminError(error.message||'Impossible de démarrer la synchronisation administrateur.');}
+  })();
+}
+const openAdmin=()=>{
+  $('#auth').classList.add('hidden');$('#app').classList.remove('hidden');go('admin');
+  const dash=$('#adminDashboard');
+  if(dash&&!dash.classList.contains('hidden')) startAdminLive();
+};
+
+window.adminLogout=async function(){stopAdminLive();try{await API.logout();$('#adminDashboard').classList.add('hidden');$('#adminLoginBox').classList.remove('hidden');$('#app').classList.add('hidden');$('#auth').classList.remove('hidden');toast('Session administrateur fermée.');}catch(e){toast(firebaseMessage(e));}};
+window.saveWave=function(){const value=$('#waveLink').value.trim();if(!/^https:\/\//i.test(value))return toast('Saisissez un lien HTTPS valide.');localStorage.setItem('psp_wave_business_link',value);toast('Lien Wave enregistré sur cet appareil.');};
+const savedWave=localStorage.getItem('psp_wave_business_link');if(savedWave&&$('#waveLink'))$('#waveLink').value=savedWave;
+
+window.adminLogin=async function(){
+  const btn=$('#adminLoginBox button.wide');
+  try{
+    const email=$('#adminUser').value.trim(),password=$('#adminPass').value;
+    if(!okMail(email)||!password)return toast('Saisissez votre e-mail et votre mot de passe administrateur.');
+    if(btn){btn.disabled=true;btn.textContent='Connexion…';}
+    const {auth,signInWithEmailAndPassword}=await window.pspFirebaseReady;
+    const cred=await signInWithEmailAndPassword(auth,email,password);
+    const token=await cred.user.getIdTokenResult(true);
+    if(!pspIsAdmin(cred.user,token)){await API.logout();throw Error('Ce compte ne possède pas les droits administrateur.');}
+    $('#adminLoginBox').classList.add('hidden');
+    $('#adminDashboard').classList.remove('hidden');
+    toast('Session administrateur ouverte.');
+    startAdminLive();
+  }catch(e){toast(firebaseMessage(e));}
+  finally{if(btn){btn.disabled=false;btn.textContent='Connexion administrateur';}}
+};
+
+async function loadAdminData(){
+  try{
+    const {db,ref,get}=await (await window.pspFirebaseReady);
+    const [usersSnap, depSnap, wSnap, lockSnap, invSnap]=await Promise.all([
+      get(ref(db,'users')),
+      get(ref(db,'deposits')),
+      get(ref(db,'withdrawals')),
+      get(ref(db,'config/planLocks')),
+      get(ref(db,'investments'))
+    ]);
+    const users=usersSnap.exists()?usersSnap.val():{};
+    const deposits=depSnap.exists()?depSnap.val():{};
+    const withdrawals=wSnap.exists()?wSnap.val():{};
+    const locks=lockSnap.exists()?lockSnap.val():{};
+    const invs=invSnap.exists()?invSnap.val():{};
+    clearAdminError();
+    const sync=$('#adminLastSync');
+    if(sync)sync.textContent='Mis à jour à '+new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    const userList=Object.entries(users||{});
+    const activeCount=userList.filter(([,u])=>(u.status||'active')==='active').length;
+    const pendingW=Object.values(withdrawals||{}).filter(x=>x&&x.status==='pending').length;
+    const investedUsers=new Set(Object.values(invs||{}).filter(x=>x&&x.status==='active').map(x=>x.userId));
+    if($('#adminMembersCount'))$('#adminMembersCount').textContent=userList.length;
+    if($('#adminActiveCount'))$('#adminActiveCount').textContent=activeCount;
+    if($('#adminDepositsCount'))$('#adminDepositsCount').textContent=Object.values(deposits||{}).filter(x=>x&&x.status==='pending').length;
+    if($('#adminWithdrawals'))$('#adminWithdrawals').textContent=pendingW;
+    if($('#adminInvestedCount'))$('#adminInvestedCount').textContent=investedUsers.size;
+
+    // Deposits with proof buttons
+    const pendingDeps=Object.entries(deposits||{}).filter(([,d])=>d&&d.status==='pending').sort((a,b)=>(b[1].createdAt||0)-(a[1].createdAt||0));
+    const depBox=$('#adminDepositsBox');
+    if(depBox){
+      if(!pendingDeps.length) depBox.innerHTML='<p class="muted">Aucun dépôt en attente.</p>';
+      else depBox.innerHTML='<table><thead><tr><th>Montant</th><th>Méthode</th><th>User</th><th>Date</th><th>Preuve</th><th>Actions</th></tr></thead><tbody>'+
+        pendingDeps.slice(0,100).map(([id,d])=>{
+          const uid=(d.userId||'').slice(0,8);
+          const customer=(users[d.userId]||{});
+          return `<tr>
+            <td>${F(d.amount||0)}</td>
+            <td>${esc(d.method||'')}</td>
+            <td title="${esc(d.userId||'')}">${esc(customer.name||customer.email||uid)}${customer.name||customer.email?'':'…'}</td>
+            <td>${new Date(d.createdAt||0).toLocaleDateString('fr-FR')}</td>
+            <td><button class="smallbtn" style="background:#1a5fb4" data-admin-act="view-proof" data-path="${esc(d.proofPath||'')}" data-meta="${esc((d.method||'')+' · '+(d.phone||'')+' · ref '+(d.receiptRef||''))}">Voir preuve</button></td>
+            <td>
+              <button class="smallbtn" style="background:#1a7f3c;border-color:#2ecf6f" data-admin-act="approve-dep" data-id="${esc(id)}">✓ Valider</button>
+              <button class="smallbtn" style="background:#8b1a1a;border-color:#e35" data-admin-act="reject-dep" data-id="${esc(id)}">✗ Refuser</button>
+            </td>
+          </tr>`;
+        }).join('')+'</tbody></table>';
+    }
+
+    // Withdrawals
+    const pendingWd=Object.entries(withdrawals||{}).filter(([,w])=>w&&w.status==='pending').sort((a,b)=>(b[1].createdAt||0)-(a[1].createdAt||0));
+    const wdBox=$('#adminWithdrawalsBox');
+    if(wdBox){
+      if(!pendingWd.length) wdBox.innerHTML='<p class="muted">Aucun retrait en attente.</p>';
+      else wdBox.innerHTML='<table><thead><tr><th>Montant</th><th>Portefeuille</th><th>Numéro</th><th>User</th><th>Date</th><th>Actions</th></tr></thead><tbody>'+
+        pendingWd.slice(0,100).map(([id,w])=>{
+          const customer=users[w.userId]||{};
+          return `<tr>
+          <td>${F(w.amount||0)}</td>
+          <td>${esc(w.method||'')}</td>
+          <td>${esc(w.phone||'')}</td>
+          <td title="${esc(w.userId||'')}">${esc(customer.name||customer.email||(w.userId||'').slice(0,8))}</td>
+          <td>${new Date(w.createdAt||0).toLocaleDateString('fr-FR')}</td>
+          <td>
+            <button class="smallbtn" style="background:#1a7f3c;border-color:#2ecf6f" data-admin-act="approve-wd" data-id="${esc(id)}">✓ Payé</button>
+            <button class="smallbtn" style="background:#8b1a1a;border-color:#e35" data-admin-act="reject-wd" data-id="${esc(id)}">✗ Refuser</button>
+          </td>
+        </tr>`}).join('')+'</tbody></table>';
+    }
+
+    // All investments
+    const invBox=$('#adminInvestedTable');
+    if(invBox){
+      const all=Object.entries(invs||{}).sort((a,b)=>(b[1].createdAt||0)-(a[1].createdAt||0));
+      if(!all.length) invBox.innerHTML='<p class="muted">Aucun investissement.</p>';
+      else invBox.innerHTML='<table><thead><tr><th>Plan</th><th>User</th><th>Prix</th><th>Gains</th><th>Jours</th><th>Statut</th><th>Actions</th></tr></thead><tbody>'+
+        all.slice(0,120).map(([id,x])=>`<tr>
+          <td>${esc(x.planName||'')}${x.gifted?' <span class="badge">offert</span>':''}</td>
+          <td title="${esc(x.userId||'')}">${esc((x.userId||'').slice(0,8))}…</td>
+          <td>${F(x.price||0)}</td>
+          <td>${F(x.earned||0)}</td>
+          <td>${x.claimedDays||0}/${x.days||DAYS}</td>
+          <td>${esc(x.status||'')}</td>
+          <td>${x.status==='active'?`
+            <button class="smallbtn" data-admin-act="cancel-inv-refund" data-id="${esc(id)}">Annuler + rembourser</button>
+            <button class="smallbtn" style="background:#8b1a1a" data-admin-act="cancel-inv" data-id="${esc(id)}">Annuler sans remboursement</button>
+          `:'—'}</td>
+        </tr>`).join('')+'</tbody></table>';
+    }
+
+    // Plan locks
+    const lockBox=$('#adminPlansLock');
+    if(lockBox){
+      lockBox.innerHTML='<table><thead><tr><th>Plan</th><th>Prix</th><th>État</th><th>Action</th></tr></thead><tbody>'+
+        PLANS.map((p,i)=>{
+          const locked=!!(locks[String(i)]||locks[i]);
+          return `<tr><td>VIP ${p.n}</td><td>${F(p.price)}</td><td>${locked?'🔒 Verrouillé':'Ouvert'}</td>
+            <td><button class="smallbtn" data-admin-act="toggle-lock" data-id="${i}" data-locked="${locked?0:1}">${locked?'Déverrouiller':'Verrouiller'}</button></td></tr>`;
+        }).join('')+'</tbody></table>';
+    }
+
+    // Sponsors
+    const sp=$('#adminSponsorsTable');
+    if(sp){
+      const counts={};
+      userList.forEach(([,u])=>{ if(u.referrer) counts[u.referrer]=(counts[u.referrer]||0)+1; });
+      const rows=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+      if(!rows.length) sp.innerHTML='<p class="muted">Aucun parrainage.</p>';
+      else sp.innerHTML='<table><thead><tr><th>Parrain</th><th>Filleuls</th></tr></thead><tbody>'+
+        rows.slice(0,60).map(([uid,n])=>`<tr><td>${esc(uid.slice(0,14))}…</td><td>${n}</td></tr>`).join('')+'</tbody></table>';
+    }
+
+    // Users
+    const ut=$('#adminUsersTable');
+    if(ut){
+      if(!userList.length) ut.innerHTML='<p class="muted">Aucun utilisateur (règles RTDB ?).</p>';
+      else ut.innerHTML='<table><thead><tr><th>Nom</th><th>Email</th><th>Dépôt</th><th>Retrait</th><th>Statut</th><th>Retrait autorisé</th><th>Actions</th></tr></thead><tbody>'+
+        userList.slice(0,200).map(([uid,u])=>{
+          const st=u.status||'active';
+          const cw=u.canWithdraw!==false;
+          return `<tr>
+            <td>${esc(u.name||'—')}</td>
+            <td>${esc(u.email||'')}</td>
+            <td>${F(u.depositBalance||0)}</td>
+            <td>${F(u.withdrawBalance||0)}</td>
+            <td>${esc(st)}</td>
+            <td>${cw?'Oui':'Non'}</td>
+            <td style="white-space:nowrap">
+              <button class="smallbtn" data-admin-act="user-status" data-id="${esc(uid)}" data-status="disabled">Désactiver</button>
+              <button class="smallbtn" data-admin-act="user-status" data-id="${esc(uid)}" data-status="banned">Bannir</button>
+              <button class="smallbtn" data-admin-act="user-status" data-id="${esc(uid)}" data-status="active">Réactiver</button>
+              <button class="smallbtn" data-admin-act="toggle-withdraw" data-id="${esc(uid)}" data-allowed="${cw?0:1}">${cw?'Bloquer retrait':'Autoriser retrait'}</button>
+              <button class="smallbtn" style="background:#8b1a1a" data-admin-act="wipe-user" data-id="${esc(uid)}">Effacer soldes + bannir</button>
+            </td>
+          </tr>`;
+        }).join('')+'</tbody></table>';
+    }
+  }catch(e){
+    console.warn('loadAdminData',e);
+    showAdminError('Chargement impossible : '+(e.message||'vérifiez les règles Firebase.')+' — les données ne sont pas remplacées par des listes vides.');
+  }
+}
+window.loadAdminData=loadAdminData;
+
+window.closeProof=function(){ const m=$('#proofModal'); if(m){ m.classList.add('hidden'); m.style.display='none'; } };
+window.adminGiftPlan=async function(){
+  const key=($('#giftUser')||{}).value||'';
+  const planIndex=+(($('#giftPlan')||{}).value||0);
+  if(!key.trim()) return toast('Indiquez l’UID ou l’e-mail du client.');
+  try{
+    await API.adminGiftPlan({userKey:key, planIndex});
+    toast('Plan VIP offert avec succès.');
+    $('#giftUser').value='';
+    await loadAdminData();
+  }catch(e){ toast(e.message||'Échec.'); }
+};
+
+
+
+document.addEventListener('click', async e=>{
+  const btn=e.target.closest('[data-admin-act]');
+  if(!btn) return;
+  const act=btn.dataset.adminAct, id=btn.dataset.id;
+  try{
+    if(act==='view-proof'){
+      const url=await API.getProofUrl(btn.dataset.path);
+      const modal=$('#proofModal'), img=$('#proofImg'), meta=$('#proofMeta');
+      if(!url){ toast('Preuve indisponible (chemin ou règles Storage).'); return; }
+      if(img) img.src=url;
+      if(meta) meta.textContent=btn.dataset.meta||'';
+      if(modal){ modal.classList.remove('hidden'); modal.style.display='flex'; }
+      return;
+    }
+    if(act==='approve-dep'){ await API.adminApproveDeposit(id); toast('Dépôt validé — solde crédité.'); }
+    else if(act==='reject-dep'){ await API.adminRejectDeposit(id); toast('Dépôt refusé.'); }
+    else if(act==='approve-wd'){ await API.adminApproveWithdrawal(id); toast('Retrait marqué payé — solde débité.'); }
+    else if(act==='reject-wd'){ await API.adminRejectWithdrawal(id); toast('Retrait refusé.'); }
+    else if(act==='user-status'){ await API.adminSetUserStatus(id, btn.dataset.status); toast('Statut mis à jour.'); }
+    else if(act==='toggle-lock'){ await API.adminTogglePlanLock(+id, btn.dataset.locked==='1'); toast('Verrouillage plan mis à jour.'); }
+    else if(act==='toggle-withdraw'){ await API.adminSetCanWithdraw(id, btn.dataset.allowed==='1'); toast('Permission de retrait mise à jour.'); }
+    else if(act==='cancel-inv-refund'){ if(!confirm('Annuler cet investissement et rembourser le prix sur le solde dépôt ?')) return; await API.adminCancelInvestment(id, true); toast('Investissement annulé + remboursement.'); }
+    else if(act==='cancel-inv'){ if(!confirm('Annuler sans remboursement ?')) return; await API.adminCancelInvestment(id, false); toast('Investissement annulé.'); }
+    else if(act==='wipe-user'){ if(!confirm('Bannir ce compte et remettre ses soldes à zéro ?')) return; await API.adminDeleteUser(id, true); toast('Compte banni et soldes effacés.'); }
+    await loadAdminData();
+  }catch(err){ toast(err.message||'Action admin échouée.'); }
+});
+
+document.addEventListener('click',e=>{
+  const hb=e.target.closest('[data-hist]');if(hb){HF=hb.dataset.hist;if(!hb.dataset.go)go('history');refresh();return}
+  if(e.target.closest('[data-copyref]'))API.current().then(u=>{if(!u)return toast('Connectez-vous pour générer votre lien.');const l=refLink(u);(navigator.clipboard?navigator.clipboard.writeText(l):Promise.reject()).then(()=>toast('Lien de parrainage copié.'),()=>{$('#refLink').select();toast('Copiez le lien affiché.')})})
+});
+window.addEventListener('psp-firebase-ready', async()=>{
+  try{
+    const {auth}=await window.pspFirebaseReady;
+    const user=auth.currentUser;
+    if(user){
+      const token=await user.getIdTokenResult(true);
+      if(pspIsAdmin(user,token)){
+        openAdmin();
+        $('#adminLoginBox').classList.add('hidden');
+        $('#adminDashboard').classList.remove('hidden');
+        startAdminLive();
+        return;
+      }
+      const u=await API.current();if(u)enter(u.name||u.email);
+    }
+    if(location.hash==='#admin')openAdmin();
+  }catch(e){console.warn('Restauration de session PSP :',e);toast(firebaseMessage(e));}
+});
+document.addEventListener('psp-firebase-error',e=>toast('Firebase ne démarre pas : '+(e.detail?.message||'vérifiez la configuration.')));
+if(location.hash==='#admin')openAdmin();
+</script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-analytics.js";
+  import { getAuth } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-auth.js";
+  import { getDatabase } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-database.js";
+  import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-storage.js";
+  import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, getIdTokenResult, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-auth.js";
+  import { ref, get, set, update, push, query, orderByChild, equalTo, onValue } from "https://www.gstatic.com/firebasejs/13.3.0/firebase-database.js";
+
+  // Configuration Firebase complète fournie pour le projet PSP.
+  const firebaseConfig = {
+    apiKey: "AIzaSyA6AasP7UBiBWxs02b2HV8QCYNwl57rhWU",
+    authDomain: "ppspp-5140f.firebaseapp.com",
+    databaseURL: "https://ppspp-5140f-default-rtdb.firebaseio.com",
+    projectId: "ppspp-5140f",
+    storageBucket: "ppspp-5140f.firebasestorage.app",
+    messagingSenderId: "676148736780",
+    appId: "1:676148736780:web:e695478134a127ca57cf29",
+    measurementId: "G-T9SM0QG3VR"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const database = getDatabase(app);
+  const storage = getStorage(app);
+
+  try { getAnalytics(app); } catch (e) {
+    console.info("Firebase Analytics indisponible dans cet environnement.");
+  }
+
+  // Services disponibles pour le branchement de la couche applicative.
+  window.fbApp=app;window.fbAuth=auth;window.fbDatabase=database;window.fbStorage=storage;
+  // Wait until Firebase has restored the persisted session before the UI checks currentUser.
+  const authReady = new Promise(resolve => {
+    const unsubscribe = onAuthStateChanged(auth, user => { unsubscribe(); resolve(user); }, error => {
+      console.error('Firebase Auth state error:', error); unsubscribe(); resolve(null);
+    });
+  });
+  window.pspFirebaseReady = authReady.then(() => ({
+    auth,db:database,storage,ref,get,set,update,push,query,orderByChild,equalTo,onValue,
+    storageRef,uploadBytes,getDownloadURL,createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,signOut,getIdTokenResult
+  }));
+  window.pspFirebaseReady.then(() => window.dispatchEvent(new Event('psp-firebase-ready'))).catch(error => {
+    console.error('PSP Firebase initialization failed:', error);
+    document.dispatchEvent(new CustomEvent('psp-firebase-error',{detail:error}));
+  });
+</script>
+
+</body>
+</html>
