@@ -287,6 +287,19 @@ html,body{overflow-x:hidden}
 .upload.has-file{border-style:solid;border-color:#8fd3ff}
 #depProofImg{max-height:200px;object-fit:contain}
 </style>
+
+<style id="psp-welcome-modal">
+.welcome-modal{position:fixed;inset:0;z-index:120;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(2,8,40,.78);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.welcome-modal.hidden{display:none!important}
+.welcome-card{width:min(420px,100%);padding:26px 22px 22px;border-radius:22px;text-align:center;background:linear-gradient(165deg,#0b2bb8,#061a6e 45%,#04124a);border:1px solid #4f86ff;box-shadow:0 24px 60px rgba(0,5,40,.55),0 0 0 1px rgba(143,211,255,.15);animation:pspPop .32s ease both}
+.welcome-icon{font-size:42px;line-height:1;margin-bottom:8px;filter:drop-shadow(0 6px 12px rgba(0,20,80,.45))}
+.welcome-card h2{font-size:26px;margin:0 0 8px;letter-spacing:.2px}
+.welcome-lead{color:#8fd3ff;font-weight:700;font-size:15px;margin:0 0 12px}
+.welcome-body{color:var(--muted);font-size:14px;line-height:1.5;margin:0 0 20px}
+.welcome-actions{display:flex;flex-direction:column;gap:10px}
+.welcome-tg{background:linear-gradient(160deg,#1d8cff,#0a4ecf)!important;border-color:#6eb6ff!important}
+.welcome-ok{background:linear-gradient(160deg,var(--btn1),var(--btn2))}
+</style>
 <script>window.PSP_ADMIN_EMAILS=['msourabi610@gmail.com'];window.pspIsAdmin=(user,token)=>token?.claims?.admin===true||PSP_ADMIN_EMAILS.includes((user?.email||'').toLowerCase());
 </script>
 
@@ -691,6 +704,20 @@ body:has(#admin.active) .nav{display:none!important}
 
 <div id="toastRoot"></div>
 
+<!-- Modale de bienvenue (inscription + chaque connexion) -->
+<div id="welcomeModal" class="welcome-modal hidden" aria-hidden="true" role="dialog" aria-labelledby="welcomeTitle">
+  <div class="welcome-card">
+    <div class="welcome-icon" aria-hidden="true">🎮</div>
+    <h2 id="welcomeTitle">Bienvenue sur PSP</h2>
+    <p class="welcome-lead">Votre aventure PlayStation commence maintenant.</p>
+    <p class="welcome-body">Rechargez, activez un plan VIP et gagnez chaque jour pendant 150 jours. Construisez votre équipe, progressez et transformez chaque dépôt en résultats concrets. L’équipe PSP est avec vous.</p>
+    <div class="welcome-actions">
+      <a class="btn wide welcome-tg" id="welcomeTgBtn" href="https://t.me/+46po5MmxVDoxODI0" target="_blank" rel="noopener noreferrer">Rejoindre notre groupe</a>
+      <button type="button" class="btn wide welcome-ok" id="welcomeOkBtn">OK</button>
+    </div>
+  </div>
+</div>
+
 <script>
 const DAYS=150; // même durée pour tous les plans
 const PLANS=[ // VIP 1 : gains à renseigner (daily et total)
@@ -736,7 +763,29 @@ $$('.tab').forEach(t=>t.onclick=()=>{
   $('#f-login').classList.toggle('hidden',t.dataset.t!=='login');
   $('#f-register').classList.toggle('hidden',t.dataset.t!=='register');
 });
-function enter(name){refresh();$('#auth').classList.add('hidden');$('#app').classList.remove('hidden');$('#uname').textContent=name||'Mon compte';go('home')}
+function showWelcomeModal(){
+  const m=$('#welcomeModal');
+  if(!m) return;
+  m.classList.remove('hidden');
+  m.setAttribute('aria-hidden','false');
+}
+function closeWelcomeModal(){
+  const m=$('#welcomeModal');
+  if(!m) return;
+  m.classList.add('hidden');
+  m.setAttribute('aria-hidden','true');
+}
+function enter(name, opts){
+  refresh();
+  $('#auth').classList.add('hidden');
+  $('#app').classList.remove('hidden');
+  $('#uname').textContent=name||'Mon compte';
+  go('home');
+  // Message de bienvenue après inscription / connexion explicite (pas à chaque rechargement de page)
+  if(opts && opts.welcome){
+    setTimeout(showWelcomeModal, 280);
+  }
+}
 /* logout handler set later */
 /* wa oninput handled later with CONFIG */
 
@@ -1172,9 +1221,9 @@ async function refresh(){
 const buy=i=>run(()=>API.buyPlan(i),'Plan VIP activé. Les gains journaliers seront crédités automatiquement.');
 function firebaseMessage(e){const c=e?.code||'';if(c==='auth/user-not-found'||c==='auth/invalid-credential')return 'Compte introuvable ou mot de passe incorrect. Essayez Se connecter avec le compte déjà créé.';if(c==='auth/email-already-in-use')return 'Cette adresse possède déjà un compte. Utilisez Se connecter au lieu de créer un compte.';if(c==='PERMISSION_DENIED'||c==='database/permission-denied')return 'Accès Firebase refusé : publiez les règles compatibles fournies avec cette version, notamment la création de /users/{UID} par son propriétaire.';return e?.message||'Erreur Firebase.';}
 const okMail=m=>/\S+@\S+\.\S+/.test(m);
-$('#loginBtn').onclick=()=>{const email=$('#le').value.trim();if(!okMail(email)||!$('#lp').value)return toast('Saisissez une adresse e-mail et un mot de passe valides.');API.login({email,password:$('#lp').value}).then(u=>{if(u.isAdmin)return openAdmin();if(u.needsProfile){$('#f-login').classList.add('hidden');$('#f-register').classList.add('hidden');$('.tabs').classList.add('hidden');$('#f-profile').classList.remove('hidden');$('#pn').value=localStorage.getItem('psp_profile_name')||'';$('#pp').value=localStorage.getItem('psp_profile_phone')||'';$('#pc').value=localStorage.getItem('psp_profile_country')||'CI';return;}enter(u.name||u.email)}).catch(e=>toast(firebaseMessage(e)))};
-$('#regBtn').onclick=()=>{const name=$('#rn').value.trim(),phone=$('#rt').value.trim(),email=$('#re').value.trim(),country=$('#rcountry').value;if(!name||!phone||!okMail(email)||$('#rp').value.length<6)return toast('Renseignez nom, téléphone, e-mail valide et un mot de passe de 6 caractères minimum.');API.register({name,phone,email,country}).then(u=>enter(u.name)).catch(e=>toast(e.message))};
-$('#profileSaveBtn').onclick=async()=>{const name=$('#pn').value.trim(),phone=$('#pp').value.trim(),country=$('#pc').value;if(name.length<2||phone.length<6)return toast('Saisissez votre nom complet et un numéro de téléphone valide.');const ok=await run(()=>API.completeProfile({name,phone,country}),'Profil enregistré.');if(ok){$('.tabs').classList.remove('hidden');$('#f-profile').classList.add('hidden');enter(name)}};
+$('#loginBtn').onclick=()=>{const email=$('#le').value.trim();if(!okMail(email)||!$('#lp').value)return toast('Saisissez une adresse e-mail et un mot de passe valides.');API.login({email,password:$('#lp').value}).then(u=>{if(u.isAdmin)return openAdmin();if(u.needsProfile){$('#f-login').classList.add('hidden');$('#f-register').classList.add('hidden');$('.tabs').classList.add('hidden');$('#f-profile').classList.remove('hidden');$('#pn').value=localStorage.getItem('psp_profile_name')||'';$('#pp').value=localStorage.getItem('psp_profile_phone')||'';$('#pc').value=localStorage.getItem('psp_profile_country')||'CI';return;}enter(u.name||u.email,{welcome:true})}).catch(e=>toast(firebaseMessage(e)))};
+$('#regBtn').onclick=()=>{const name=$('#rn').value.trim(),phone=$('#rt').value.trim(),email=$('#re').value.trim(),country=$('#rcountry').value;if(!name||!phone||!okMail(email)||$('#rp').value.length<6)return toast('Renseignez nom, téléphone, e-mail valide et un mot de passe de 6 caractères minimum.');API.register({name,phone,email,country}).then(u=>enter(u.name,{welcome:true})).catch(e=>toast(e.message))};
+$('#profileSaveBtn').onclick=async()=>{const name=$('#pn').value.trim(),phone=$('#pp').value.trim(),country=$('#pc').value;if(name.length<2||phone.length<6)return toast('Saisissez votre nom complet et un numéro de téléphone valide.');const ok=await run(()=>API.completeProfile({name,phone,country}),'Profil enregistré.');if(ok){$('.tabs').classList.remove('hidden');$('#f-profile').classList.add('hidden');enter(name,{welcome:true})}};
 $('#profileCancelBtn').onclick=()=>API.logout().then(()=>{$('#f-profile').classList.add('hidden');$('.tabs').classList.remove('hidden');$('#f-login').classList.remove('hidden');$('#lp').value=''}).catch(e=>toast(firebaseMessage(e)));
 $('#logout').onclick=()=>API.logout().then(()=>{$('#app').classList.add('hidden');$('#auth').classList.remove('hidden')}).catch(e=>toast(firebaseMessage(e)));
 const paymentNumbers={'MTN Mobile Money':'0566219780','Wave':'0596180495','Orange Money':'0749045488'};
@@ -1293,6 +1342,10 @@ $('#depSubmit')?.addEventListener('click', async ()=>{
 });
 $('#depDone')?.addEventListener('click', ()=>{ closeDepositWizard(); go('home'); refresh(); });
 
+/* ===== Modale de bienvenue ===== */
+$('#welcomeOkBtn')?.addEventListener('click', closeWelcomeModal);
+$('#welcomeModal')?.addEventListener('click', e=>{ if(e.target===$('#welcomeModal')) closeWelcomeModal(); });
+$('#welcomeTgBtn')?.addEventListener('click', ()=>{ /* le lien s'ouvre dans un nouvel onglet ; on laisse la modale ouverte pour OK */ });
 
 let adminUnsubs=[];
 let adminRefreshTimer=null;
